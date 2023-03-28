@@ -1,0 +1,7 @@
+.idea
+*.exe
+*.log
+logs
+main
+app
+.DS_Store
