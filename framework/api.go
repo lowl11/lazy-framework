@@ -3,8 +3,6 @@ package framework
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/lowl11/lazy-framework/data/interfaces"
-	"github.com/lowl11/lazy-framework/framework/echo_server"
-	"github.com/lowl11/lazy-framework/log"
 	"time"
 )
 
@@ -14,20 +12,6 @@ var (
 
 	TimeoutDuration = time.Second * 60
 )
-
-var (
-	server interfaces.IServer
-)
-
-func Init() error {
-	// log init
-	log.Init(LogFileName, LogFolderName)
-
-	// server init
-	server = echo_server.Create(TimeoutDuration)
-
-	return nil
-}
 
 func SetLogConfig(fileName, folderName string) {
 	if len(fileName) > 0 {
@@ -48,8 +32,13 @@ func ServerEcho() *echo.Echo {
 }
 
 func Server() interfaces.IServer {
-	if server == nil {
-		panic("Server is NULL")
+	if err := initFramework(); err != nil {
+		panic("Initialization lazy-framework error: " + err.Error())
 	}
+
+	if server == nil {
+		panic("Initialization error. Server is NULL")
+	}
+
 	return server
 }

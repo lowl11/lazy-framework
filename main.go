@@ -9,18 +9,18 @@ import (
 )
 
 func main() {
-	//framework.SetLogConfig("info", "logs")
-	framework.SetServerTimeout(time.Second * 30)
+	// custom settings before calling initialization (in .Server().Start())
+	framework.SetLogConfig("info", "logs")       // setting custom logger config
+	framework.SetServerTimeout(time.Second * 30) // setting custom server timeout (REST)
 
-	if err := framework.Init(); err != nil {
-		log.Fatal(err, "Framework init error")
-	}
-
+	// setting Echo routes
 	setRoutes(framework.ServerEcho())
 
-	framework.Server().Start(":8080")
-
+	// global logging package
 	log.Info("hello world")
+
+	// starting server (calls .Fatal() log if catch error)
+	framework.Server().Start(":8080")
 }
 
 func setRoutes(server *echo.Echo) {
