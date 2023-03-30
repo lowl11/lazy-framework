@@ -10,7 +10,7 @@ func (server *Server) Start(port string) {
 }
 
 func (server *Server) ActivateSwagger() {
-	//
+	server.useSwagger = true
 }
 
 func (server *Server) Get() *echo.Echo {
