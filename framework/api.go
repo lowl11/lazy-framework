@@ -16,6 +16,10 @@ func UseSwagger() {
 	useSwagger = true
 }
 
+func WebFramework(webFramework string) {
+	_webFramework = webFramework
+}
+
 func SetLogConfig(fileName, folderName string) {
 	log.SetConfig(fileName, folderName)
 }
@@ -29,13 +33,12 @@ func ServerEcho() *echo.Echo {
 }
 
 func Server() interfaces.IServer {
-	if server == nil {
+	_serverMutex.Lock()
+	defer _serverMutex.Unlock()
+
+	if _server == nil {
 		initFramework()
 	}
 
-	if server == nil {
-		panic("Initialization error. Server is NULL")
-	}
-
-	return server
+	return _server
 }

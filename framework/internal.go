@@ -6,10 +6,18 @@ import (
 	"github.com/lowl11/lazy-framework/events"
 	"github.com/lowl11/lazy-framework/framework/echo_server"
 	"github.com/lowl11/lazy-framework/log"
+	"sync"
+)
+
+const (
+	defaultWebFramework = "echo"
 )
 
 var (
-	server interfaces.IServer
+	_server      interfaces.IServer
+	_serverMutex sync.Mutex
+
+	_webFramework = defaultWebFramework
 )
 
 func initFramework() {
@@ -23,8 +31,15 @@ func initFramework() {
 	controllers.Init()
 
 	// server init
-	server = echo_server.Create(TimeoutDuration)
+	switch _webFramework {
+	case EchoFramework:
+		_server = echo_server.Create(TimeoutDuration)
+	}
+	if _server == nil {
+		panic("Initialization error. Server is NULL")
+	}
+
 	if useSwagger {
-		server.ActivateSwagger()
+		_server.ActivateSwagger()
 	}
 }

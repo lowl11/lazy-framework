@@ -12,15 +12,15 @@ var (
 	_folderName = FolderName
 )
 
-var logger logapi.ILogger
+var _logger logapi.ILogger
 
 func Init() {
-	if logger != nil { // logger already exist
+	if _logger != nil { // _logger already exist
 		return
 	}
 
-	// creating new logger instance
-	logger = logapi.New().File(_fileName, _folderName)
+	// creating new _logger instance
+	_logger = logapi.New().File(_fileName, _folderName)
 }
 
 func SetConfig(fileName, folderName string) {
@@ -34,36 +34,36 @@ func SetConfig(fileName, folderName string) {
 }
 
 func Info(args ...string) {
-	if logger == nil {
+	if _logger == nil {
 		Init()
 	}
-	logger.Info(args...)
+	_logger.Info(args...)
 }
 
 func Debug(args ...string) {
-	if logger == nil {
+	if _logger == nil {
 		Init()
 	}
-	logger.Debug(args...)
+	_logger.Debug(args...)
 }
 
 func Warn(args ...string) {
-	if logger == nil {
+	if _logger == nil {
 		Init()
 	}
-	logger.Warn(args...)
+	_logger.Warn(args...)
 }
 
 func Error(err error, args ...string) {
-	if logger == nil {
+	if _logger == nil {
 		Init()
 	}
-	logger.Error(err, args...)
+	_logger.Error(err, args...)
 }
 
 func Fatal(err error, args ...string) {
-	if logger == nil {
+	if _logger == nil {
 		Init()
 	}
-	logger.Fatal(err, args...)
+	_logger.Fatal(err, args...)
 }
