@@ -6,7 +6,8 @@ import (
 )
 
 type IController interface {
-	Ok(ctx echo.Context, response interface{}, messages ...string) error
+	Ok(ctx echo.Context, response any, messages ...string) error
+	OkAny(ctx echo.Context, response any) error
 	Error(ctx echo.Context, err *models.Error, status ...int) error
 	NotFound(ctx echo.Context, err *models.Error) error
 	Unauthorized(ctx echo.Context, err *models.Error) error

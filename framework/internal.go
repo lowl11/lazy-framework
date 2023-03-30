@@ -2,6 +2,7 @@ package framework
 
 import (
 	"github.com/lowl11/lazy-framework/data/interfaces"
+	"github.com/lowl11/lazy-framework/events"
 	"github.com/lowl11/lazy-framework/framework/echo_server"
 	"github.com/lowl11/lazy-framework/log"
 )
@@ -13,6 +14,9 @@ var (
 func initFramework() error {
 	// log init
 	log.Init(LogFileName, LogFolderName)
+
+	// events init
+	events.Init()
 
 	// server init
 	server = echo_server.Create(TimeoutDuration)

@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"github.com/jmoiron/sqlx"
+	"github.com/lowl11/lazy-framework/events"
 	"github.com/lowl11/lazy-framework/events/script_event"
 	"github.com/lowl11/lazy-framework/log"
 	"strings"
@@ -13,9 +14,13 @@ type Base struct {
 	script *script_event.Event
 }
 
-func CreateBase(script *script_event.Event) Base {
+func CreateBase() Base {
+	if events.Script == nil {
+		panic("'script event' is NULL")
+	}
+
 	return Base{
-		script: script,
+		script: events.Script,
 	}
 }
 

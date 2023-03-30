@@ -45,7 +45,7 @@ func (controller *Base) Unauthorized(ctx echo.Context, err *models2.Error) error
 	return ctx.JSON(http.StatusUnauthorized, errorObject)
 }
 
-func (controller *Base) Ok(ctx echo.Context, response interface{}, messages ...string) error {
+func (controller *Base) Ok(ctx echo.Context, response any, messages ...string) error {
 	defaultMessage := "OK"
 	if len(messages) > 0 {
 		defaultMessage = messages[0]
@@ -58,6 +58,10 @@ func (controller *Base) Ok(ctx echo.Context, response interface{}, messages ...s
 		Body:         response,
 	}
 	return ctx.JSON(http.StatusOK, successObject)
+}
+
+func (controller *Base) OkAny(ctx echo.Context, response any) error {
+	return ctx.JSON(http.StatusOK, response)
 }
 
 func (controller *Base) RequiredField(value interface{}, name string) error {
