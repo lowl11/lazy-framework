@@ -11,7 +11,13 @@ var (
 	LogFolderName = "logs" // example: logs/info_28-03-2023.log
 
 	TimeoutDuration = time.Second * 60
+
+	useSwagger bool
 )
+
+func UseSwagger() {
+	useSwagger = true
+}
 
 func SetLogConfig(fileName, folderName string) {
 	if len(fileName) > 0 {
@@ -32,8 +38,8 @@ func ServerEcho() *echo.Echo {
 }
 
 func Server() interfaces.IServer {
-	if err := initFramework(); err != nil {
-		panic("Initialization lazy-framework error: " + err.Error())
+	if server == nil {
+		initFramework()
 	}
 
 	if server == nil {

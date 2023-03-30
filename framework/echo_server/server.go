@@ -7,8 +7,6 @@ import (
 
 type Server struct {
 	server *echo.Echo
-
-	useSwagger bool
 }
 
 func Create(timeout time.Duration) *Server {

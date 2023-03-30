@@ -12,7 +12,7 @@ var (
 	server interfaces.IServer
 )
 
-func initFramework() error {
+func initFramework() {
 	// log init
 	log.Init(LogFileName, LogFolderName)
 
@@ -24,5 +24,7 @@ func initFramework() error {
 
 	// server init
 	server = echo_server.Create(TimeoutDuration)
-	return nil
+	if useSwagger {
+		server.ActivateSwagger()
+	}
 }
