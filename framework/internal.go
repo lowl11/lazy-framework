@@ -14,7 +14,7 @@ var (
 
 func initFramework() {
 	// log init
-	log.Init(LogFileName, LogFolderName)
+	log.Init()
 
 	// events init
 	events.Init()

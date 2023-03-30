@@ -3,16 +3,13 @@ package framework
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/lowl11/lazy-framework/data/interfaces"
+	"github.com/lowl11/lazy-framework/log"
 	"time"
 )
 
 var (
-	LogFileName   = "info" // example: info.log
-	LogFolderName = "logs" // example: logs/info_28-03-2023.log
-
 	TimeoutDuration = time.Second * 60
-
-	useSwagger bool
+	useSwagger      bool
 )
 
 func UseSwagger() {
@@ -20,13 +17,7 @@ func UseSwagger() {
 }
 
 func SetLogConfig(fileName, folderName string) {
-	if len(fileName) > 0 {
-		LogFileName = fileName
-	}
-
-	if len(folderName) > 0 {
-		LogFolderName = folderName
-	}
+	log.SetConfig(fileName, folderName)
 }
 
 func SetServerTimeout(timeout time.Duration) {
