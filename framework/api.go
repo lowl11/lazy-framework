@@ -3,6 +3,7 @@ package framework
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/lowl11/lazy-framework/data/interfaces"
+	"github.com/lowl11/lazy-framework/data/models"
 	"github.com/lowl11/lazy-framework/log"
 	"github.com/lowl11/lazylog/logapi"
 	"time"
@@ -10,11 +11,19 @@ import (
 
 var (
 	TimeoutDuration = time.Second * 60
-	useSwagger      bool
+	_useSwagger     bool
+	_useHttp2       bool
+
+	_http2Config *models.Http2Config
 )
 
 func UseSwagger() {
-	useSwagger = true
+	_useSwagger = true
+}
+
+func UseHttp2(config *models.Http2Config) {
+	_useHttp2 = true
+	_http2Config = config
 }
 
 func WebFramework(webFramework string) {
