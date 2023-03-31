@@ -24,6 +24,9 @@ func main() {
 	// setting Echo routes
 	setRoutes(framework.ServerEcho())
 
+	// setting custom loggers
+	framework.SetCustomLoggers(/* some custom loggers */)
+
 	// global logging package
 	log.Info("hello world")
 
