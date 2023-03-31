@@ -12,7 +12,11 @@ var (
 	_folderName = FolderName
 )
 
-var _logger logapi.ILogger
+var (
+	_logger logapi.ILogger
+
+	_customLoggers = make([]logapi.ILogger, 0)
+)
 
 func Init() {
 	if _logger != nil { // _logger already exist
@@ -20,7 +24,15 @@ func Init() {
 	}
 
 	// creating new _logger instance
-	_logger = logapi.New().File(_fileName, _folderName)
+	loggerInstance := logapi.New()
+	for _, customLogger := range _customLoggers {
+		loggerInstance.Custom(customLogger)
+	}
+	_logger = loggerInstance.File(_fileName, _folderName)
+}
+
+func SetCustom(customLoggers ...logapi.ILogger) {
+	_customLoggers = customLoggers
 }
 
 func SetConfig(fileName, folderName string) {

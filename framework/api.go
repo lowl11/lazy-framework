@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/lowl11/lazy-framework/data/interfaces"
 	"github.com/lowl11/lazy-framework/log"
+	"github.com/lowl11/lazylog/logapi"
 	"time"
 )
 
@@ -22,6 +23,10 @@ func WebFramework(webFramework string) {
 
 func SetLogConfig(fileName, folderName string) {
 	log.SetConfig(fileName, folderName)
+}
+
+func SetCustomLoggers(customLoggers ...logapi.ILogger) {
+	log.SetCustom(customLoggers...)
 }
 
 func SetServerTimeout(timeout time.Duration) {
