@@ -7,7 +7,7 @@ require (
 	github.com/labstack/echo/v4 v4.10.2
 	github.com/lib/pq v1.2.0
 	github.com/lowl11/lazyfile v0.1.0
-	github.com/lowl11/lazylog v1.1.2
+	github.com/lowl11/lazylog v1.1.3
 	github.com/swaggo/echo-swagger v1.4.0
 )
 
