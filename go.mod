@@ -6,9 +6,11 @@ require (
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/labstack/echo/v4 v4.10.2
 	github.com/lib/pq v1.2.0
+	github.com/lowl11/lazyconfig v1.1.4
 	github.com/lowl11/lazyfile v0.1.0
 	github.com/lowl11/lazylog v1.1.3
 	github.com/swaggo/echo-swagger v1.4.0
+	golang.org/x/net v0.8.0
 )
 
 require (
@@ -30,10 +32,10 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	golang.org/x/crypto v0.6.0 // indirect
-	golang.org/x/net v0.8.0 // indirect
 	golang.org/x/sys v0.6.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/tools v0.7.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

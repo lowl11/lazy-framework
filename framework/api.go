@@ -2,6 +2,7 @@ package framework
 
 import (
 	"github.com/labstack/echo/v4"
+	"github.com/lowl11/lazy-framework/config"
 	"github.com/lowl11/lazy-framework/data/interfaces"
 	"github.com/lowl11/lazy-framework/data/models"
 	"github.com/lowl11/lazy-framework/log"
@@ -36,6 +37,18 @@ func SetLogConfig(fileName, folderName string) {
 
 func SetCustomLoggers(customLoggers ...logapi.ILogger) {
 	log.SetCustom(customLoggers...)
+}
+
+func SetEnvironmentName(name string) {
+	config.SetEnvironmentName(name)
+}
+
+func SetEnvironmentDefault(name string) {
+	config.SetEnvironmentDefault(name)
+}
+
+func SetEnvironmentFileName(fileName string) {
+	config.SetEnvironmentFileName(fileName)
 }
 
 func SetServerTimeout(timeout time.Duration) {

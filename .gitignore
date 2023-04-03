@@ -2,6 +2,7 @@
 *.exe
 *.log
 logs
+profiles
 main
 main.go
 app

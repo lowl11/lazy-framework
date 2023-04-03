@@ -1,6 +1,7 @@
 package framework
 
 import (
+	"github.com/lowl11/lazy-framework/config"
 	"github.com/lowl11/lazy-framework/controllers"
 	"github.com/lowl11/lazy-framework/data/interfaces"
 	"github.com/lowl11/lazy-framework/data/models"
@@ -27,6 +28,9 @@ var (
 func initFramework() {
 	// log init
 	log.Init()
+
+	// config init
+	config.Init()
 
 	// events init
 	events.Init()
