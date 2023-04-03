@@ -2,6 +2,8 @@ package config
 
 import (
 	"github.com/lowl11/lazyconfig/confapi"
+	"os"
+	"strings"
 )
 
 func Init() {
@@ -16,6 +18,22 @@ func Init() {
 
 func Get(key string) string {
 	return confapi.Get(key)
+}
+
+func Env() string {
+	if _environment == "" {
+		_environment = os.Getenv("env")
+	}
+
+	return strings.ToLower(_environment)
+}
+
+func IsProduction() bool {
+	return strings.ToLower(Env()) == "production"
+}
+
+func IsLocal() bool {
+	return strings.ToLower(Env()) == "local"
 }
 
 func SetEnvironmentName(name string) {

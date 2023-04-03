@@ -7,3 +7,4 @@ main
 main.go
 app
 .DS_Store
+.env
