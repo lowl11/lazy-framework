@@ -8,7 +8,7 @@ require (
 	github.com/lib/pq v1.2.0
 	github.com/lowl11/lazyconfig v1.1.4
 	github.com/lowl11/lazyfile v0.1.0
-	github.com/lowl11/lazylog v1.1.4
+	github.com/lowl11/lazylog v1.1.5
 	github.com/swaggo/echo-swagger v1.4.0
 	golang.org/x/net v0.8.0
 )
