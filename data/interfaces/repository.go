@@ -8,7 +8,9 @@ import (
 
 type IRepository interface {
 	Ctx(customTimeout ...time.Duration) (context.Context, func())
+}
 
+type ISqlRepository interface {
 	StartScript(name string) string
 	Script(folder, name string) string
 
