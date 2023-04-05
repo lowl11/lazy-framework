@@ -10,11 +10,11 @@ import (
 func Timeout(timeout time.Duration) echo.MiddlewareFunc {
 	return middleware.TimeoutWithConfig(middleware.TimeoutConfig{
 		Skipper:      middleware.DefaultSkipper,
-		ErrorMessage: "Запрос достигнул таймаута",
+		ErrorMessage: "Request reached timeout!",
 		Timeout:      timeout,
 
 		OnTimeoutRouteErrorHandler: func(err error, ctx echo.Context) {
-			timeoutError := errors.New("request reached timeout | " + err.Error())
+			timeoutError := errors.New(err.Error())
 			ctx.Error(timeoutError)
 		},
 	})

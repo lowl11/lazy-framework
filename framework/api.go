@@ -18,6 +18,14 @@ var (
 	_http2Config *models.Http2Config
 )
 
+func Init() {
+	if _server != nil {
+		return
+	}
+
+	initFramework()
+}
+
 func UseSwagger() {
 	_useSwagger = true
 }
