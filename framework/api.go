@@ -63,6 +63,10 @@ func SetServerTimeout(timeout time.Duration) {
 	TimeoutDuration = timeout
 }
 
+func StartServer(port string) {
+	Server().Start(port)
+}
+
 func ServerEcho() *echo.Echo {
 	return Server().(interfaces.IEchoServer).Get()
 }
