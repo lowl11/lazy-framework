@@ -45,37 +45,37 @@ func SetConfig(fileName, folderName string) {
 	}
 }
 
-func Info(value string, args ...any) {
+func Info(args ...any) {
 	if _logger == nil {
 		Init()
 	}
-	_logger.Info(value, args...)
+	_logger.Info(args...)
 }
 
-func Debug(value string, args ...any) {
+func Debug(args ...any) {
 	if _logger == nil {
 		Init()
 	}
-	_logger.Debug(value, args...)
+	_logger.Debug(args...)
 }
 
-func Warn(value string, args ...any) {
+func Warn(args ...any) {
 	if _logger == nil {
 		Init()
 	}
-	_logger.Warn(value, args...)
+	_logger.Warn(args...)
 }
 
-func Error(err error, value string, args ...any) {
+func Error(err error, args ...any) {
 	if _logger == nil {
 		Init()
 	}
-	_logger.Error(err, value, args...)
+	_logger.Error(err, args...)
 }
 
-func Fatal(err error, value string, args ...any) {
+func Fatal(err error, args ...any) {
 	if _logger == nil {
 		Init()
 	}
-	_logger.Fatal(err, value, args...)
+	_logger.Fatal(err, args...)
 }
