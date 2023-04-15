@@ -26,6 +26,10 @@ var (
 )
 
 func initFramework() {
+	defer func() {
+		_initDone = true
+	}()
+
 	// log init
 	log.Init()
 
@@ -63,5 +67,11 @@ func initFramework() {
 
 	if _useSwagger {
 		_server.ActivateSwagger()
+	}
+}
+
+func warnInit() {
+	if _initDone {
+		panic("Framework initialization already was done, move setting above the initialization")
 	}
 }
