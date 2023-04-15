@@ -48,6 +48,16 @@ func SetLogConfig(fileName, folderName string) {
 	log.SetConfig(fileName, folderName)
 }
 
+func SetLogJsonMode() {
+	warnInit()
+	log.SetJsonMode()
+}
+
+func SetLogNoTimeMode() {
+	warnInit()
+	log.SetNoTimeMode()
+}
+
 func SetCustomLoggers(customLoggers ...logapi.ILogger) {
 	warnInit()
 	log.SetCustom(customLoggers...)

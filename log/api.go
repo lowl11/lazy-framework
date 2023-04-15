@@ -10,6 +10,9 @@ const (
 var (
 	_fileName   = FileName
 	_folderName = FolderName
+
+	_jsonMode   bool
+	_noTimeMode bool
 )
 
 var (
@@ -28,7 +31,17 @@ func Init() {
 	for _, customLogger := range _customLoggers {
 		loggerInstance.Custom(customLogger)
 	}
-	_logger = loggerInstance.File(_fileName, _folderName)
+	loggerInstance.File(_fileName, _folderName)
+
+	if _noTimeMode {
+		loggerInstance.NoTime()
+	}
+
+	if _jsonMode {
+		loggerInstance.JSON()
+	}
+
+	_logger = loggerInstance
 }
 
 func SetCustom(customLoggers ...logapi.ILogger) {
@@ -43,6 +56,14 @@ func SetConfig(fileName, folderName string) {
 	if len(folderName) > 0 {
 		_folderName = folderName
 	}
+}
+
+func SetJsonMode() {
+	_jsonMode = true
+}
+
+func SetNoTimeMode() {
+	_noTimeMode = true
 }
 
 func Info(args ...any) {
