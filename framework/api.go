@@ -58,6 +58,11 @@ func SetLogNoTimeMode() {
 	log.SetNoTimeMode()
 }
 
+func SetLogNoPrefixMode() {
+	warnInit()
+	log.SetNoPrefixMode()
+}
+
 func SetCustomLoggers(customLoggers ...logapi.ILogger) {
 	warnInit()
 	log.SetCustom(customLoggers...)

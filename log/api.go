@@ -11,8 +11,9 @@ var (
 	_fileName   = FileName
 	_folderName = FolderName
 
-	_jsonMode   bool
-	_noTimeMode bool
+	_jsonMode     bool
+	_noTimeMode   bool
+	_noPrefixMode bool
 )
 
 var (
@@ -41,6 +42,10 @@ func Init() {
 		loggerInstance.JSON()
 	}
 
+	if _noPrefixMode {
+		loggerInstance.NoPrefix()
+	}
+
 	_logger = loggerInstance
 }
 
@@ -64,6 +69,10 @@ func SetJsonMode() {
 
 func SetNoTimeMode() {
 	_noTimeMode = true
+}
+
+func SetNoPrefixMode() {
+	_noPrefixMode = true
 }
 
 func Info(args ...any) {
