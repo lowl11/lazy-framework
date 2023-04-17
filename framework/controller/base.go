@@ -1,18 +1,13 @@
 package controller
 
 import (
-	"errors"
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazy-framework/data/interfaces"
 	"net/http"
-	"strings"
 )
 
-type Base struct {
-	//
-}
+type Base struct{}
 
 func (controller *Base) Error(ctx echo.Context, err interfaces.IException, status ...int) error {
 	responseStatus := http.StatusInternalServerError
@@ -63,30 +58,4 @@ func (controller *Base) Ok(ctx echo.Context, response any, messages ...string) e
 
 func (controller *Base) OkAny(ctx echo.Context, response any) error {
 	return ctx.JSON(http.StatusOK, response)
-}
-
-func (controller *Base) RequiredField(value interface{}, name string) error {
-	if value == nil {
-		return errors.New(fmt.Sprintf("Field %s is null, but it's required", name))
-	}
-
-	_, isString := value.(string)
-	if isString && value.(string) == "" {
-		return errors.New(fmt.Sprintf("Field %s is null or empty, but it's required", name))
-	}
-
-	_, isInt := value.(int)
-	if isInt && value.(int) == 0 {
-		return errors.New(fmt.Sprintf("Field %s is null or zero, but it's required", name))
-	}
-
-	return nil
-}
-
-func (controller *Base) FilterString(value string) string {
-	return strings.TrimSpace(strings.ToLower(value))
-}
-
-func (controller *Base) FilterStringSimple(value string) string {
-	return strings.TrimSpace(value)
 }
