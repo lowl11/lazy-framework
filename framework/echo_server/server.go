@@ -2,14 +2,14 @@ package echo_server
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/lowl11/lazy-framework/data/models"
+	"github.com/lowl11/lazy-framework/data/domain"
 	"time"
 )
 
 type Server struct {
 	server        *echo.Echo
 	serverTimeout time.Duration
-	http2Config   *models.Http2Config
+	http2Config   *domain.Http2Config
 
 	useHttp2 bool
 }

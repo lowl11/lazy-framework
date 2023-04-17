@@ -3,7 +3,7 @@ package echo_server
 import (
 	"errors"
 	"github.com/labstack/echo/v4"
-	"github.com/lowl11/lazy-framework/data/models"
+	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazy-framework/log"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"golang.org/x/net/http2"
@@ -36,7 +36,7 @@ func (server *Server) StartHttp2(port string) {
 	log.Fatal(server.server.StartH2CServer(port, http2Server), "Start HTTP2 server error")
 }
 
-func (server *Server) SetHttp2Config(config *models.Http2Config) {
+func (server *Server) SetHttp2Config(config *domain.Http2Config) {
 	// check if config is NULL
 	if config == nil {
 		log.Fatal(errors.New("config is NULL"), "Setting HTTP 2.0 config")

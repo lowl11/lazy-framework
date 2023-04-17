@@ -3,8 +3,8 @@ package framework
 import (
 	"github.com/lowl11/lazy-framework/config"
 	"github.com/lowl11/lazy-framework/controllers"
+	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazy-framework/data/interfaces"
-	"github.com/lowl11/lazy-framework/data/models"
 	"github.com/lowl11/lazy-framework/events"
 	"github.com/lowl11/lazy-framework/framework/echo_server"
 	"github.com/lowl11/lazy-framework/log"
@@ -55,7 +55,7 @@ func initFramework() {
 	if _useHttp2 {
 		// if config is empty, use default values
 		if _http2Config == nil {
-			_http2Config = &models.Http2Config{
+			_http2Config = &domain.Http2Config{
 				MaxConcurrentStreams: http2MaxConcurrentStreams,
 				MaxReadFrameSize:     http2MaxReadFrameSize,
 			}

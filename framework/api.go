@@ -3,8 +3,8 @@ package framework
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/lowl11/lazy-framework/config"
+	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazy-framework/data/interfaces"
-	"github.com/lowl11/lazy-framework/data/models"
 	"github.com/lowl11/lazy-framework/log"
 	"github.com/lowl11/lazylog/logapi"
 	"time"
@@ -16,7 +16,7 @@ var (
 	_useSwagger     bool
 	_useHttp2       bool
 
-	_http2Config *models.Http2Config
+	_http2Config *domain.Http2Config
 )
 
 func Init() {
@@ -32,7 +32,7 @@ func UseSwagger() {
 	_useSwagger = true
 }
 
-func UseHttp2(config *models.Http2Config) {
+func UseHttp2(config *domain.Http2Config) {
 	warnInit()
 	_useHttp2 = true
 	_http2Config = config

@@ -4,7 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/labstack/echo/v4"
-	models2 "github.com/lowl11/lazy-framework/data/models"
+	"github.com/lowl11/lazy-framework/data/domain"
+	"github.com/lowl11/lazy-framework/data/interfaces"
 	"net/http"
 	"strings"
 )
@@ -13,34 +14,34 @@ type Base struct {
 	//
 }
 
-func (controller *Base) Error(ctx echo.Context, err *models2.Error, status ...int) error {
+func (controller *Base) Error(ctx echo.Context, err interfaces.IException, status ...int) error {
 	responseStatus := http.StatusInternalServerError
 	if len(status) > 0 {
 		responseStatus = status[0]
 	}
 
-	errorObject := &models2.Response{
+	errorObject := &domain.Response{
 		Status:       "ERROR",
-		Message:      err.BusinessMessage,
-		InnerMessage: err.TechMessage,
+		Message:      err.Business(),
+		InnerMessage: err.Tech(),
 	}
 	return ctx.JSON(responseStatus, errorObject)
 }
 
-func (controller *Base) NotFound(ctx echo.Context, err *models2.Error) error {
-	errorObject := &models2.Response{
+func (controller *Base) NotFound(ctx echo.Context, err interfaces.IException) error {
+	errorObject := &domain.Response{
 		Status:       "ERROR",
-		Message:      err.BusinessMessage,
-		InnerMessage: err.TechMessage,
+		Message:      err.Business(),
+		InnerMessage: err.Tech(),
 	}
 	return ctx.JSON(http.StatusNotFound, errorObject)
 }
 
-func (controller *Base) Unauthorized(ctx echo.Context, err *models2.Error) error {
-	errorObject := &models2.Response{
+func (controller *Base) Unauthorized(ctx echo.Context, err interfaces.IException) error {
+	errorObject := &domain.Response{
 		Status:       "ERROR",
-		Message:      err.BusinessMessage,
-		InnerMessage: err.TechMessage,
+		Message:      err.Business(),
+		InnerMessage: err.Tech(),
 	}
 	return ctx.JSON(http.StatusUnauthorized, errorObject)
 }
@@ -51,7 +52,7 @@ func (controller *Base) Ok(ctx echo.Context, response any, messages ...string) e
 		defaultMessage = messages[0]
 	}
 
-	successObject := &models2.Response{
+	successObject := &domain.Response{
 		Status:       "OK",
 		Message:      defaultMessage,
 		InnerMessage: defaultMessage,
