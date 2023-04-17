@@ -6,6 +6,6 @@ type Controller struct {
 	controller.Base
 }
 
-func Create() *Controller {
+func New() *Controller {
 	return &Controller{}
 }

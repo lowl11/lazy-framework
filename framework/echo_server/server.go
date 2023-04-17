@@ -14,7 +14,7 @@ type Server struct {
 	useHttp2 bool
 }
 
-func Create(timeout time.Duration, useHttp2 bool) *Server {
+func New(timeout time.Duration, useHttp2 bool) *Server {
 	server := &Server{
 		server:   echo.New(),
 		useHttp2: useHttp2,

@@ -9,7 +9,7 @@ var (
 func Init() {
 	var err error
 
-	Script, err = script_event.Create()
+	Script, err = script_event.New()
 	if err != nil {
 		panic(err)
 	}

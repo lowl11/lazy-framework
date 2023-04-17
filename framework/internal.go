@@ -45,7 +45,7 @@ func initFramework() {
 	// server init
 	switch _webFramework {
 	case EchoFramework:
-		_server = echo_server.Create(TimeoutDuration, _useHttp2)
+		_server = echo_server.New(TimeoutDuration, _useHttp2)
 	}
 	if _server == nil {
 		panic("Initialization error. Server is NULL")

@@ -7,5 +7,5 @@ var (
 )
 
 func Init() {
-	Static = static_controller.Create()
+	Static = static_controller.New()
 }

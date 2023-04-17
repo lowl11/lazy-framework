@@ -5,7 +5,7 @@ type Event struct {
 	scripts      map[string]any
 }
 
-func Create() (*Event, error) {
+func New() (*Event, error) {
 	event := &Event{
 		startScripts: make(map[string]string),
 		scripts:      make(map[string]any),
