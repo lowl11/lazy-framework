@@ -14,6 +14,7 @@ var (
 	_jsonMode     bool
 	_noTimeMode   bool
 	_noPrefixMode bool
+	_noFileMode   bool
 )
 
 var (
@@ -32,7 +33,10 @@ func Init() {
 	for _, customLogger := range _customLoggers {
 		loggerInstance.Custom(customLogger)
 	}
-	loggerInstance.File(_fileName, _folderName)
+
+	if !_noFileMode {
+		loggerInstance.File(_fileName, _folderName)
+	}
 
 	if _noTimeMode {
 		loggerInstance.NoTime()
@@ -73,6 +77,10 @@ func SetNoTimeMode() {
 
 func SetNoPrefixMode() {
 	_noPrefixMode = true
+}
+
+func SetNoFileMode() {
+	_noFileMode = true
 }
 
 func Info(args ...any) {

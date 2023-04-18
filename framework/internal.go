@@ -1,6 +1,7 @@
 package framework
 
 import (
+	"fmt"
 	"github.com/lowl11/lazy-framework/config"
 	"github.com/lowl11/lazy-framework/controllers"
 	"github.com/lowl11/lazy-framework/data/domain"
@@ -25,15 +26,17 @@ var (
 	_webFramework = defaultWebFramework
 )
 
-func initFramework() {
+func initFramework(frameworkConfig *Config) {
 	defer func() {
 		_initDone = true
 	}()
 
 	// log init
+	initLog(frameworkConfig)
 	log.Init()
 
 	// config init
+	initConfig(frameworkConfig)
 	config.Init()
 
 	// events init
@@ -43,16 +46,23 @@ func initFramework() {
 	controllers.Init()
 
 	// server init
+	timeoutDuration := _timeoutDuration
+	if frameworkConfig.ServerTimeout != 0 {
+		timeoutDuration = frameworkConfig.ServerTimeout
+	}
+
+	fmt.Println("timeout duration:", timeoutDuration.String())
+
 	switch _webFramework {
 	case EchoFramework:
-		_server = echo_server.New(TimeoutDuration, _useHttp2)
+		_server = echo_server.New(timeoutDuration, frameworkConfig.UseHttp2)
 	}
 	if _server == nil {
 		panic("Initialization error. Server is NULL")
 	}
 
 	// set http 2.0 server
-	if _useHttp2 {
+	if frameworkConfig.UseHttp2 {
 		// if config is empty, use default values
 		if _http2Config == nil {
 			_http2Config = &domain.Http2Config{
@@ -65,13 +75,40 @@ func initFramework() {
 		_server.SetHttp2Config(_http2Config)
 	}
 
-	if _useSwagger {
+	if frameworkConfig.UseSwagger {
 		_server.ActivateSwagger()
 	}
 }
 
-func warnInit() {
-	if _initDone {
-		panic("Framework initialization already was done, move setting above the initialization")
+func initLog(config *Config) {
+	// file logger
+	log.SetConfig(config.LogFileName, config.LogFolderName)
+
+	// custom loggers
+	if config.CustomLoggers != nil {
+		log.SetCustom(config.CustomLoggers...)
 	}
+
+	// modes
+	if config.LogNoTime {
+		log.SetNoTimeMode()
+	}
+
+	if config.LogJson {
+		log.SetJsonMode()
+	}
+
+	if config.LogNoPrefix {
+		log.SetNoPrefixMode()
+	}
+
+	if config.LogNoFile {
+		log.SetNoFileMode()
+	}
+}
+
+func initConfig(frameworkConfig *Config) {
+	config.SetEnvironmentName(frameworkConfig.EnvironmentName)
+	config.SetEnvironmentDefault(frameworkConfig.EnvironmentDefault)
+	config.SetEnvironmentFileName(frameworkConfig.EnvironmentFileName)
 }
