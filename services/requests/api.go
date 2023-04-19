@@ -16,6 +16,11 @@ func (service *Service) XML() *Service {
 	return service
 }
 
+func (service *Service) SslTrust() *Service {
+	service.sslCheck = true
+	return service
+}
+
 func (service *Service) Timeout(seconds time.Duration) *Service {
 	service.timeout = seconds
 	service.customTimeout = true
@@ -96,7 +101,7 @@ func (service *Service) Send() ([]byte, error) {
 
 	client := http.Client{
 		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: !service.sslCheck},
 		},
 	}
 	response, err := client.Do(request)

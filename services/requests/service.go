@@ -24,12 +24,25 @@ type Service struct {
 
 	request *http.Request
 
+	sslCheck bool
+
 	status int
 }
 
 func New(method, url string, body any) *Service {
 	return &Service{
 		method: method,
+		url:    url,
+		body:   body,
+
+		headers: make(map[string][]string),
+		cookies: make(map[string]string),
+	}
+}
+
+func NewSoap(url string, body any) *Service {
+	return &Service{
+		method: http.MethodPost,
 		url:    url,
 		body:   body,
 
