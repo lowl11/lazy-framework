@@ -122,6 +122,23 @@ test_env_key: {{TEST_ENV_KEY}} # <- will be replaced from env
 ### Features
 <hr>
 
-Web Frameworks <br>
+### Tools
+:white_check_mark: REST <br>
+:x: SOAP <br>
+:x: gRPC <br>
+
+:white_check_mark: Postgres <br>
+:white_check_mark: Mongo <br>
+:x: Redis
+:x: Elasticsearch
+
+:x: RabbitMQ <br>
+:x: Kafka <br>
+
+<hr>
+
+### Web Frameworks <br>
 :white_check_mark: Echo <br>
 :x: Gin <br>
+:x: Chi <br>
+:x: Fiber <br>
