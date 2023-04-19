@@ -9,6 +9,8 @@ import (
 type Job struct {
 	scheduler   *gocron.Scheduler
 	runFuncList []domain.JobFunc
+
+	started bool
 }
 
 func New() *Job {
