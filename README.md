@@ -18,27 +18,28 @@ import (
 )
 
 func main() {
-	// turn on swagger endpoints
-	framework.UseSwagger()
-
-	// set config & environment settings
-	framework.SetEnvironmentDefault("local")
-
-	// turn on HTTP 2.0 mode
-	framework.UseHttp2(&models.Http2Config{
-		MaxConcurrentStreams: 123,
-		MaxReadFrameSize:     123,
-	})
-
-	// setting custom loggers
-	framework.SetCustomLoggers( /* some custom loggers */ )
-
-	// custom settings before calling initialization (in .Server().Start())
-	framework.SetLogConfig("info", "logs")       // setting custom logger config
-	framework.SetServerTimeout(time.Second * 30) // setting custom server timeout (REST)
-
 	// init framework with given settings
-	framework.Init()
+	framework.Init(&framework.Config{
+		// turn on swagger endpoints
+		UseSwagger: true,
+
+		// set config & environment settings
+		EnvironmentDefault: "local",
+
+		// turn on HTTP 2.0 mode
+		UseHttp2: true,
+		Http2Config: &domain.Http2Config{
+			MaxConcurrentStreams: 123,
+			MaxReadFrameSize:     123,
+		},
+
+		// custom settings before calling initialization (in .Server().Start())
+		LogFileName:   "info",
+		LogFolderName: "logs",
+
+		// server settings
+		ServerTimeout: time.Second * 30,
+	})
 
 	// setting Echo routes
 	setRoutes(framework.ServerEcho())
@@ -52,7 +53,7 @@ func main() {
 	log.Info("Environment:", config.Env())
 
 	// starting server (calls .Fatal() log if catch error)
-	framework.Server().Start(":8080")
+	framework.StartServer(":8080")
 }
 
 func setRoutes(server *echo.Echo) {
@@ -85,7 +86,11 @@ package main
 import "github.com/lowl11/lazy-framework/framework"
 
 func main() {
-	framework.SetCustomLoggers(someCustomLogger1, someCustomLogger2)
+	framework.Init(&framework.Config{
+		CustomLoggers: []logapi.ILogger{
+			&myLogger,
+		},
+	})
 }
 ```
 
