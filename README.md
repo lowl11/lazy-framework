@@ -124,12 +124,13 @@ test_env_key: {{TEST_ENV_KEY}} # <- will be replaced from env
 
 ### Tools
 :white_check_mark: REST <br>
+:x: Cron Job <br>
 :x: SOAP <br>
 :x: gRPC <br>
 
 :white_check_mark: Postgres <br>
 :white_check_mark: Mongo <br>
-:x: Redis
+:x: Redis <br>
 :x: Elasticsearch
 
 :x: RabbitMQ <br>
