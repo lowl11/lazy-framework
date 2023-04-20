@@ -4,6 +4,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazy-framework/data/interfaces"
+	"github.com/lowl11/lazy-rmq/rabbit_event"
+	"github.com/lowl11/lazy-rmq/rabbit_service"
 	"github.com/lowl11/lazylog/logapi"
 	"time"
 )
@@ -64,4 +66,16 @@ func Server() interfaces.IServer {
 	}
 
 	return _server
+}
+
+func Rabbit(connectionString string) (*rabbit_event.Event, error) {
+	connection, err := rabbit_service.NewConnection(connectionString)
+	if err != nil {
+		return nil, err
+	}
+	rmqEvent, err := rabbit_event.New(connection)
+	if err != nil {
+		return nil, err
+	}
+	return rmqEvent, nil
 }

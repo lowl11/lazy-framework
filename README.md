@@ -133,7 +133,7 @@ test_env_key: {{TEST_ENV_KEY}} # <- will be replaced from env
 :x: Redis <br>
 :x: Elasticsearch
 
-:x: RabbitMQ <br>
+:white_check_mark: RabbitMQ <br>
 :x: Kafka <br>
 
 <hr>
