@@ -8,4 +8,5 @@ type IException interface {
 	Business() string
 	Tech() string
 	With(err error) *domain.Exception
+	HttpStatus() int
 }

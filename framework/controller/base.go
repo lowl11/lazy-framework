@@ -9,18 +9,13 @@ import (
 
 type Base struct{}
 
-func (controller *Base) Error(ctx echo.Context, err interfaces.IException, status ...int) error {
-	responseStatus := http.StatusInternalServerError
-	if len(status) > 0 {
-		responseStatus = status[0]
-	}
-
+func (controller *Base) Error(ctx echo.Context, err interfaces.IException) error {
 	errorObject := &domain.Response{
 		Status:       "ERROR",
 		Message:      err.Business(),
 		InnerMessage: err.Tech(),
 	}
-	return ctx.JSON(responseStatus, errorObject)
+	return ctx.JSON(err.HttpStatus(), errorObject)
 }
 
 func (controller *Base) NotFound(ctx echo.Context, err interfaces.IException) error {
