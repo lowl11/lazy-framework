@@ -1,7 +1,6 @@
 package framework
 
 import (
-	"fmt"
 	"github.com/lowl11/lazy-framework/config"
 	"github.com/lowl11/lazy-framework/controllers"
 	"github.com/lowl11/lazy-framework/data/domain"
@@ -50,8 +49,6 @@ func initFramework(frameworkConfig *Config) {
 	if frameworkConfig.ServerTimeout != 0 {
 		timeoutDuration = frameworkConfig.ServerTimeout
 	}
-
-	fmt.Println("timeout duration:", timeoutDuration.String())
 
 	switch _webFramework {
 	case EchoFramework:
