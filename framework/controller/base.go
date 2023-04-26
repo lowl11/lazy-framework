@@ -4,12 +4,15 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazy-framework/data/interfaces"
+	"github.com/lowl11/lazy-framework/log"
 	"net/http"
 )
 
 type Base struct{}
 
 func (controller *Base) Error(ctx echo.Context, err interfaces.IException) error {
+	log.Error(err.ToError())
+
 	errorObject := &domain.Response{
 		Status:       "ERROR",
 		Message:      err.Business(),

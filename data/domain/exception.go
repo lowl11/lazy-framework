@@ -1,23 +1,28 @@
 package domain
 
-import "net/http"
+import (
+	"github.com/lowl11/lazy-collection/array"
+	"net/http"
+	"strings"
+)
 
 type Exception struct {
-	TechMessage     string `json:"tech_message"`
-	BusinessMessage string `json:"business_message"`
+	BusinessMessage string `json:"business_message,omitempty"`
 	httpStatus      int
+
+	withinErrors []error
 }
 
-func NewException(techMessage, businessMessage string, status int) *Exception {
+func NewException(businessMessage string, status int) *Exception {
 	return &Exception{
-		TechMessage:     techMessage,
 		BusinessMessage: businessMessage,
 		httpStatus:      status,
+		withinErrors:    make([]error, 0),
 	}
 }
 
 func (exception *Exception) Error() string {
-	return exception.TechMessage + " -> " + exception.BusinessMessage
+	return exception.BusinessMessage + exception.techMessage(true)
 }
 
 func (exception *Exception) ToString() string {
@@ -33,13 +38,12 @@ func (exception *Exception) Business() string {
 }
 
 func (exception *Exception) Tech() string {
-	return exception.TechMessage
+	return exception.techMessage(false)
 }
 
 func (exception *Exception) With(err error) *Exception {
-	with := exception.copy()
-	with.TechMessage = err.Error() + " | " + with.TechMessage
-	return with
+	exception.withinErrors = append(exception.withinErrors, err)
+	return exception
 }
 
 func (exception *Exception) HttpStatus() int {
@@ -52,8 +56,26 @@ func (exception *Exception) HttpStatus() int {
 
 func (exception *Exception) copy() *Exception {
 	errorCopy := &Exception{
-		TechMessage:     exception.TechMessage,
 		BusinessMessage: exception.BusinessMessage,
+		httpStatus:      exception.httpStatus,
+		withinErrors:    exception.withinErrors,
 	}
 	return errorCopy
+}
+
+func (exception *Exception) techMessage(fullMessage bool) string {
+	withinMessages := make([]string, 0, len(exception.withinErrors))
+	array.NewWithList[error](exception.withinErrors...).Each(func(item error) {
+		withinMessages = append(withinMessages, item.Error())
+	})
+
+	var withinMessage string
+	if len(withinMessages) > 0 {
+		if fullMessage {
+			withinMessage = " --> "
+		}
+		withinMessage += strings.Join(withinMessages, " | ")
+	}
+
+	return withinMessage
 }

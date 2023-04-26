@@ -1,13 +1,14 @@
 package exceptions
 
+import "net/http"
+
 var (
 	RouteNotFound = New(
 		"Route not found",
-		"Путь не найден",
+		http.StatusNotFound,
 	)
 
 	Timeout = New(
 		"Request reached timed out",
-		"Время работы истекло",
 	)
 )
