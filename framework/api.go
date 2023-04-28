@@ -10,13 +10,6 @@ import (
 	"time"
 )
 
-var (
-	_timeoutDuration = time.Second * 60
-	_initDone        bool
-
-	_http2Config *domain.Http2Config
-)
-
 type Config struct {
 	UseSwagger bool
 
@@ -78,4 +71,8 @@ func Rabbit(connectionString string) (*rabbit_event.Event, error) {
 		return nil, err
 	}
 	return rmqEvent, nil
+}
+
+func ShutDownAction(action func()) {
+	addShutDownAction(action)
 }

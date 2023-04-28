@@ -1,6 +1,8 @@
 package framework
 
 import (
+	"errors"
+	"github.com/lowl11/lazy-collection/safe_array"
 	"github.com/lowl11/lazy-framework/config"
 	"github.com/lowl11/lazy-framework/controllers"
 	"github.com/lowl11/lazy-framework/data/domain"
@@ -8,7 +10,11 @@ import (
 	"github.com/lowl11/lazy-framework/events"
 	"github.com/lowl11/lazy-framework/framework/echo_server"
 	"github.com/lowl11/lazy-framework/log"
+	"os"
+	"os/signal"
 	"sync"
+	"syscall"
+	"time"
 )
 
 const (
@@ -19,11 +25,21 @@ const (
 )
 
 var (
+	_timeoutDuration = time.Second * 60
+	_initDone        bool
+
 	_server      interfaces.IServer
 	_serverMutex sync.Mutex
+	_http2Config *domain.Http2Config
 
 	_webFramework = defaultWebFramework
+
+	_shutDownActions *safe_array.Array[func()]
 )
+
+func init() {
+	_shutDownActions = safe_array.New[func()]()
+}
 
 func initFramework(frameworkConfig *Config) {
 	defer func() {
@@ -75,6 +91,8 @@ func initFramework(frameworkConfig *Config) {
 	if frameworkConfig.UseSwagger {
 		_server.ActivateSwagger()
 	}
+
+	runShutDownWaiter()
 }
 
 func initLog(config *Config) {
@@ -108,4 +126,40 @@ func initConfig(frameworkConfig *Config) {
 	config.SetEnvironmentName(frameworkConfig.EnvironmentName)
 	config.SetEnvironmentDefault(frameworkConfig.EnvironmentDefault)
 	config.SetEnvironmentFileName(frameworkConfig.EnvironmentFileName)
+}
+
+func addShutDownAction(action func()) {
+	_shutDownActions.Push(action)
+}
+
+func runShutDownWaiter() {
+	go func() {
+		// Create a channel to receive signals
+		signalChannel := make(chan os.Signal, 1)
+
+		// Notify the signal channel when a SIGINT or SIGTERM signal is received
+		signal.Notify(signalChannel, os.Interrupt, syscall.SIGTERM)
+
+		<-signalChannel
+
+		_shutDownActions.Each(func(item func()) {
+			defer func() {
+				if value := recover(); value != nil {
+					var err error
+					if _, ok := value.(string); ok {
+						err = errors.New(value.(string))
+					} else if _, ok = value.(error); ok {
+						err = value.(error)
+					}
+					log.Error(err, "Catch panic from shut down action")
+				}
+			}()
+
+			// call action
+			item()
+		})
+
+		// call shutdown
+		os.Exit(0)
+	}()
 }
