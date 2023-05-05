@@ -43,7 +43,7 @@ func (exception *Exception) Tech() string {
 
 func (exception *Exception) With(err error) *Exception {
 	exception.withinErrors = append(exception.withinErrors, err)
-	return exception
+	return exception.copy()
 }
 
 func (exception *Exception) HttpStatus() int {
