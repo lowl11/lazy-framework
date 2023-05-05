@@ -42,8 +42,9 @@ func (exception *Exception) Tech() string {
 }
 
 func (exception *Exception) With(err error) *Exception {
-	exception.withinErrors = append(exception.withinErrors, err)
-	return exception.copy()
+	copyException := exception.copy()
+	copyException.withinErrors = append(exception.withinErrors, err)
+	return copyException
 }
 
 func (exception *Exception) HttpStatus() int {
