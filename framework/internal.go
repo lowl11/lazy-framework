@@ -10,6 +10,7 @@ import (
 	"github.com/lowl11/lazy-framework/events"
 	"github.com/lowl11/lazy-framework/framework/echo_server"
 	"github.com/lowl11/lazy-framework/log"
+	"github.com/lowl11/lazy-framework/log/log_internal"
 	"os"
 	"os/signal"
 	"sync"
@@ -44,7 +45,7 @@ func initFramework(frameworkConfig *Config) {
 
 	// log init
 	initLog(frameworkConfig)
-	log.Init()
+	log_internal.Init()
 
 	// config init
 	initConfig(frameworkConfig)
@@ -96,28 +97,28 @@ func initFramework(frameworkConfig *Config) {
 
 func initLog(config *Config) {
 	// file logger
-	log.SetConfig(config.LogFileName, config.LogFolderName)
+	log_internal.SetConfig(config.LogFileName, config.LogFolderName)
 
 	// custom loggers
 	if config.CustomLoggers != nil {
-		log.SetCustom(config.CustomLoggers...)
+		log_internal.SetCustom(config.CustomLoggers...)
 	}
 
 	// modes
 	if config.LogNoTime {
-		log.SetNoTimeMode()
+		log_internal.SetNoTimeMode()
 	}
 
 	if config.LogJson {
-		log.SetJsonMode()
+		log_internal.SetJsonMode()
 	}
 
 	if config.LogNoPrefix {
-		log.SetNoPrefixMode()
+		log_internal.SetNoPrefixMode()
 	}
 
 	if config.LogNoFile {
-		log.SetNoFileMode()
+		log_internal.SetNoFileMode()
 	}
 }
 
