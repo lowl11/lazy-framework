@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/lowl11/lazyconfig/confapi"
+	"github.com/lowl11/lazyconfig/config_data"
 	"os"
 	"strings"
 )
@@ -37,13 +38,25 @@ func IsLocal() bool {
 }
 
 func SetEnvironmentName(name string) {
+	if name == "" {
+		_environmentName = config_data.EnvironmentName
+		return
+	}
 	_environmentName = name
 }
 
 func SetEnvironmentDefault(name string) {
+	if name == "" {
+		_environmentDefault = config_data.EnvironmentDefault
+		return
+	}
 	_environmentDefault = name
 }
 
 func SetEnvironmentFileName(fileName string) {
+	if fileName == "" {
+		_environmentFileName = config_data.EnvFileNameDefault
+		return
+	}
 	_environmentFileName = fileName
 }
