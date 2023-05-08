@@ -25,14 +25,10 @@ const (
 )
 
 var (
-	_timeoutDuration = time.Second * 60
-	_initDone        bool
+	_initDone bool
 
 	_server      interfaces.IServer
 	_serverMutex sync.Mutex
-	_http2Config *domain.Http2Config
-
-	_webFramework = defaultWebFramework
 
 	_shutDownActions *safe_array.Array[func()]
 )
@@ -61,12 +57,15 @@ func initFramework(frameworkConfig *Config) {
 	controllers.Init()
 
 	// server init
-	timeoutDuration := _timeoutDuration
+	timeoutDuration := time.Second * 60
 	if frameworkConfig.ServerTimeout != 0 {
 		timeoutDuration = frameworkConfig.ServerTimeout
 	}
 
-	switch _webFramework {
+	if frameworkConfig.WebFramework == "" {
+		frameworkConfig.WebFramework = defaultWebFramework
+	}
+	switch frameworkConfig.WebFramework {
 	case EchoFramework:
 		_server = echo_server.New(timeoutDuration, frameworkConfig.UseHttp2)
 	}
@@ -77,15 +76,15 @@ func initFramework(frameworkConfig *Config) {
 	// set http 2.0 server
 	if frameworkConfig.UseHttp2 {
 		// if config is empty, use default values
-		if _http2Config == nil {
-			_http2Config = &domain.Http2Config{
+		if frameworkConfig.Http2Config == nil {
+			frameworkConfig.Http2Config = &domain.Http2Config{
 				MaxConcurrentStreams: http2MaxConcurrentStreams,
 				MaxReadFrameSize:     http2MaxReadFrameSize,
 			}
 		}
 
 		// set http 2.0 server config
-		_server.SetHttp2Config(_http2Config)
+		_server.SetHttp2Config(frameworkConfig.Http2Config)
 	}
 
 	if frameworkConfig.UseSwagger {
