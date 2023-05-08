@@ -2,12 +2,12 @@ package script_event
 
 import "strings"
 
-// StartScript получить скрипт из папки /resources/scripts/start/<файл>.sql
+// StartScript get script from folder /resources/scripts/start/<script_file>.sql
 func (event *Event) StartScript(script string) string {
 	return event.startScripts[script+".sql"]
 }
 
-// Script получить скрипт из папки /resources/script/<папка>/<файл>.sql
+// Script get script from folder /resources/script/<folder>/<script_file>.sql
 func (event *Event) Script(folder, script string) string {
 	// remove .sql
 	script = strings.ReplaceAll(script, ".sql", "")
@@ -17,6 +17,6 @@ func (event *Event) Script(folder, script string) string {
 		return ""
 	}
 
-	// sucess case
+	// success case
 	return event.scripts[folder].(map[string]string)[script+".sql"]
 }
