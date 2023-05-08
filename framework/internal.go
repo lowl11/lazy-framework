@@ -120,6 +120,10 @@ func initLog(config *Config) {
 	if config.LogNoFile {
 		log_internal.SetNoFileMode()
 	}
+
+	if config.LogLevel > 0 {
+		log_internal.SetLogLevel(config.LogLevel)
+	}
 }
 
 func initConfig(frameworkConfig *Config) {

@@ -20,6 +20,7 @@ type Config struct {
 	LogNoTime     bool
 	LogNoPrefix   bool
 	LogNoFile     bool
+	LogLevel      uint
 	CustomLoggers []logapi.ILogger
 
 	// environment

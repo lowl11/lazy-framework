@@ -29,6 +29,10 @@ func Init() {
 		loggerInstance.NoPrefix()
 	}
 
+	if _logLevel > 0 {
+		loggerInstance.Level(_logLevel)
+	}
+
 	_logger = loggerInstance
 }
 
@@ -60,6 +64,10 @@ func SetNoPrefixMode() {
 
 func SetNoFileMode() {
 	_noFileMode = true
+}
+
+func SetLogLevel(logLevel uint) {
+	_logLevel = logLevel
 }
 
 func Info(args ...any) {

@@ -20,4 +20,5 @@ var (
 	_noTimeMode   bool
 	_noPrefixMode bool
 	_noFileMode   bool
+	_logLevel     uint
 )
