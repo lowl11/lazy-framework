@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/lowl11/lazy-collection/safe_array"
 	"github.com/lowl11/lazy-framework/config"
+	frameworkConfig "github.com/lowl11/lazy-framework/config"
 	"github.com/lowl11/lazy-framework/controllers"
 	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazy-framework/data/interfaces"
@@ -11,6 +12,7 @@ import (
 	"github.com/lowl11/lazy-framework/framework/echo_server"
 	"github.com/lowl11/lazy-framework/log"
 	"github.com/lowl11/lazy-framework/log/log_internal"
+	"github.com/lowl11/lazylog/logapi/log_levels"
 	"os"
 	"os/signal"
 	"sync"
@@ -123,6 +125,10 @@ func initLog(config *Config) {
 
 	if config.LogLevel > 0 {
 		log_internal.SetLogLevel(config.LogLevel)
+	} else {
+		if frameworkConfig.IsProduction() {
+			log_internal.SetLogLevel(log_levels.INFO)
+		}
 	}
 }
 
