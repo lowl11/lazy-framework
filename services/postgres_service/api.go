@@ -23,7 +23,11 @@ func (service *Service) ConnectionPool() (*sqlx.DB, error) {
 
 	// ping database
 	log.Info("Ping Postgres database connection pool...")
-	if err = connectionPool.Ping(); err != nil {
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
+	defer cancel()
+
+	if err = connectionPool.PingContext(ctx); err != nil {
 		return nil, err
 	}
 	log.Info("Ping Postgres database connection pool done!")
@@ -47,7 +51,10 @@ func (service *Service) Connection() (*sqlx.DB, error) {
 	connection.SetConnMaxIdleTime(time.Duration(service.maxLifetime) * time.Minute)
 
 	log.Info("Ping Postgres database connection...")
-	if err = connection.Ping(); err != nil {
+	ctx, cancel = context.WithTimeout(context.Background(), time.Second*30)
+	defer cancel()
+
+	if err = connection.PingContext(ctx); err != nil {
 		return nil, err
 	}
 	log.Info("Ping Postgres database connection done!")
