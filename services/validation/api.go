@@ -21,3 +21,7 @@ func RequiredField(value any, name string) error {
 
 	return nil
 }
+
+func IsPrimitive(value any) bool {
+	return isInteger(value) || isString(value) || isBool(value) || isFloat(value)
+}

@@ -5,6 +5,8 @@ import (
 	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazy-framework/data/interfaces"
 	"github.com/lowl11/lazy-framework/log"
+	"github.com/lowl11/lazy-framework/services/type_helper"
+	"github.com/lowl11/lazy-framework/services/validation"
 	"net/http"
 )
 
@@ -55,5 +57,9 @@ func (controller *Base) Ok(ctx echo.Context, response any, messages ...string) e
 }
 
 func (controller *Base) OkAny(ctx echo.Context, response any) error {
+	if validation.IsPrimitive(response) {
+		return ctx.String(http.StatusOK, type_helper.ToString(response))
+	}
+
 	return ctx.JSON(http.StatusOK, response)
 }

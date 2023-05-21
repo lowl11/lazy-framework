@@ -131,7 +131,7 @@ test_env_key: {{TEST_ENV_KEY}} # <- will be replaced from env
 :white_check_mark: Postgres <br>
 :white_check_mark: Mongo <br>
 :x: Redis <br>
-:x: Elasticsearch
+:x: Elasticsearch <br>
 
 :white_check_mark: RabbitMQ <br>
 :x: Kafka <br>
