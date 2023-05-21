@@ -61,8 +61,8 @@ func Server() interfaces.IServer {
 	return _server
 }
 
-func Rabbit(connectionString string) (*rabbit_event.Event, error) {
-	rmqEvent, err := rabbit_event.New(connectionString)
+func Rabbit(connectionString string, heartbeat time.Duration) (*rabbit_event.Event, error) {
+	rmqEvent, err := rabbit_event.NewConfig(connectionString, heartbeat)
 	if err != nil {
 		return nil, err
 	}
