@@ -13,6 +13,7 @@ func (server *Server) Start(port string) {
 	}
 	server.listener = listener
 
+	log.Info("gRPC server started at", port)
 	if err = server.server.Serve(listener); err != nil {
 		log.Fatal(err, "Run gRPC server error")
 	}

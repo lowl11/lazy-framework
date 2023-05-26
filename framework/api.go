@@ -90,6 +90,10 @@ func GrpcServer() interfaces.IGRPCServer {
 		panic("Framework initialization was not done!")
 	}
 
+	if !_useGrpc {
+		panic("Set the flag \"UseGRPC\" in framework config")
+	}
+
 	return _grpcServer
 }
 

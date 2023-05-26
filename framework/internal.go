@@ -34,6 +34,7 @@ var (
 	_server      interfaces.IServer
 	_serverMutex sync.Mutex
 
+	_useGrpc         bool
 	_grpcServer      interfaces.IGRPCServer
 	_grpcServerMutex sync.Mutex
 
@@ -171,6 +172,7 @@ func initGrpcServer(frameworkConfig *Config) {
 		return
 	}
 
+	_useGrpc = frameworkConfig.UseGRPC
 	_grpcServerMutex.Lock()
 	defer _grpcServerMutex.Unlock()
 
