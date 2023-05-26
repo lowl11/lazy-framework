@@ -3,6 +3,7 @@ package interfaces
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/lowl11/lazy-framework/data/domain"
+	"google.golang.org/grpc"
 )
 
 type IServer interface {
@@ -14,4 +15,10 @@ type IServer interface {
 
 type IEchoServer interface {
 	Get() *echo.Echo
+}
+
+type IGRPCServer interface {
+	Start(port string)
+	Close() error
+	Get() *grpc.Server
 }

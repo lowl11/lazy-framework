@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazy-framework/data/interfaces"
+	"github.com/lowl11/lazy-framework/log"
 	"github.com/lowl11/lazy-rmq/rabbit_event"
 	"github.com/lowl11/lazylog/logapi"
 	"time"
@@ -32,6 +33,10 @@ type Config struct {
 	Http2Config   *domain.Http2Config
 	WebFramework  string
 	ServerTimeout time.Duration
+
+	// grpc
+	UseGRPC  bool
+	OnlyGRPC bool
 }
 
 func Init(config *Config) {
@@ -44,6 +49,22 @@ func Init(config *Config) {
 
 func StartServer(port string) {
 	Server().Start(port)
+}
+
+func StartHttp2Server(port string) {
+	Server().StartHttp2(port)
+}
+
+func StartGRPC(port string) {
+	ShutDownAction(func() {
+		if err := GrpcServer().Close(); err != nil {
+			log.Error(err, "Close gRPC server connection error")
+			return
+		}
+		log.Info("gRPC server connection closed!")
+	})
+
+	GrpcServer().Start(port)
 }
 
 func ServerEcho() *echo.Echo {
@@ -59,6 +80,17 @@ func Server() interfaces.IServer {
 	}
 
 	return _server
+}
+
+func GrpcServer() interfaces.IGRPCServer {
+	_grpcServerMutex.Lock()
+	defer _grpcServerMutex.Unlock()
+
+	if !_initDone {
+		panic("Framework initialization was not done!")
+	}
+
+	return _grpcServer
 }
 
 func Rabbit(connectionString string, heartbeat time.Duration) (*rabbit_event.Event, error) {

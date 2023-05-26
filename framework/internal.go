@@ -10,6 +10,7 @@ import (
 	"github.com/lowl11/lazy-framework/data/interfaces"
 	"github.com/lowl11/lazy-framework/events"
 	"github.com/lowl11/lazy-framework/framework/echo_server"
+	"github.com/lowl11/lazy-framework/framework/grpc_server"
 	"github.com/lowl11/lazy-framework/log"
 	"github.com/lowl11/lazy-framework/log/log_internal"
 	"github.com/lowl11/lazylog/logapi/log_levels"
@@ -32,6 +33,9 @@ var (
 
 	_server      interfaces.IServer
 	_serverMutex sync.Mutex
+
+	_grpcServer      interfaces.IGRPCServer
+	_grpcServerMutex sync.Mutex
 
 	_shutDownActions *safe_array.Array[func()]
 )
@@ -60,39 +64,10 @@ func initFramework(frameworkConfig *Config) {
 	controllers.Init()
 
 	// server init
-	timeoutDuration := time.Second * 60
-	if frameworkConfig.ServerTimeout != 0 {
-		timeoutDuration = frameworkConfig.ServerTimeout
-	}
+	initServer(frameworkConfig)
 
-	if frameworkConfig.WebFramework == "" {
-		frameworkConfig.WebFramework = defaultWebFramework
-	}
-	switch frameworkConfig.WebFramework {
-	case EchoFramework:
-		_server = echo_server.New(timeoutDuration, frameworkConfig.UseHttp2)
-	}
-	if _server == nil {
-		panic("Initialization error. Server is NULL")
-	}
-
-	// set http 2.0 server
-	if frameworkConfig.UseHttp2 {
-		// if config is empty, use default values
-		if frameworkConfig.Http2Config == nil {
-			frameworkConfig.Http2Config = &domain.Http2Config{
-				MaxConcurrentStreams: http2MaxConcurrentStreams,
-				MaxReadFrameSize:     http2MaxReadFrameSize,
-			}
-		}
-
-		// set http 2.0 server config
-		_server.SetHttp2Config(frameworkConfig.Http2Config)
-	}
-
-	if frameworkConfig.UseSwagger {
-		_server.ActivateSwagger()
-	}
+	// gRPC server init
+	initGrpcServer(frameworkConfig)
 
 	runShutDownWaiter()
 }
@@ -136,6 +111,70 @@ func initConfig(frameworkConfig *Config) {
 	config.SetEnvironmentName(frameworkConfig.EnvironmentName)
 	config.SetEnvironmentDefault(frameworkConfig.EnvironmentDefault)
 	config.SetEnvironmentFileName(frameworkConfig.EnvironmentFileName)
+}
+
+func initServer(frameworkConfig *Config) {
+	// HTTP server already exist
+	if _server != nil || _initDone {
+		return
+	}
+
+	// only gRPC server (no HTTP)
+	if frameworkConfig.UseGRPC && frameworkConfig.OnlyGRPC {
+		return
+	}
+
+	_serverMutex.Lock()
+	defer _serverMutex.Unlock()
+
+	timeoutDuration := time.Second * 60
+	if frameworkConfig.ServerTimeout != 0 {
+		timeoutDuration = frameworkConfig.ServerTimeout
+	}
+
+	if frameworkConfig.WebFramework == "" {
+		frameworkConfig.WebFramework = defaultWebFramework
+	}
+	switch frameworkConfig.WebFramework {
+	case EchoFramework:
+		_server = echo_server.New(timeoutDuration, frameworkConfig.UseHttp2)
+	}
+	if _server == nil {
+		panic("Initialization error. Server is NULL")
+	}
+
+	// set http 2.0 server
+	if frameworkConfig.UseHttp2 {
+		// if config is empty, use default values
+		if frameworkConfig.Http2Config == nil {
+			frameworkConfig.Http2Config = &domain.Http2Config{
+				MaxConcurrentStreams: http2MaxConcurrentStreams,
+				MaxReadFrameSize:     http2MaxReadFrameSize,
+			}
+		}
+
+		// set http 2.0 server config
+		_server.SetHttp2Config(frameworkConfig.Http2Config)
+	}
+
+	if frameworkConfig.UseSwagger {
+		_server.ActivateSwagger()
+	}
+}
+
+func initGrpcServer(frameworkConfig *Config) {
+	if _grpcServer != nil || _initDone {
+		return
+	}
+
+	if !frameworkConfig.UseGRPC {
+		return
+	}
+
+	_grpcServerMutex.Lock()
+	defer _grpcServerMutex.Unlock()
+
+	_grpcServer = grpc_server.New()
 }
 
 func addShutDownAction(action func()) {
