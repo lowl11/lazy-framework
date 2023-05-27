@@ -5,6 +5,7 @@ import (
 	"github.com/lowl11/lazy-framework/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	"time"
 )
 
 func (service *Service) Credentials(creds credentials.TransportCredentials) *Service {
@@ -14,6 +15,11 @@ func (service *Service) Credentials(creds credentials.TransportCredentials) *Ser
 
 func (service *Service) Options(dialOptions ...grpc.DialOption) *Service {
 	service.opts = append(service.opts, dialOptions...)
+	return service
+}
+
+func (service *Service) Timeout(duration time.Duration) *Service {
+	service.timeout = duration
 	return service
 }
 
