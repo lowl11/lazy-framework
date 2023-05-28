@@ -1,7 +1,10 @@
 package grpc_helper
 
 import (
+	"github.com/lowl11/lazy-framework/data/exceptions"
+	"github.com/lowl11/lazy-framework/data/interfaces"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"net/http"
 )
 
@@ -13,12 +16,6 @@ func HttpCode(code codes.Code) int {
 		return http.StatusNotFound
 	case codes.Canceled:
 		return 499
-	case codes.Unknown:
-		return http.StatusInternalServerError
-	case codes.InvalidArgument:
-	case codes.FailedPrecondition:
-	case codes.OutOfRange:
-		return http.StatusBadRequest
 	case codes.DeadlineExceeded:
 		return http.StatusGatewayTimeout
 	case codes.AlreadyExists:
@@ -35,12 +32,30 @@ func HttpCode(code codes.Code) int {
 		return http.StatusNotImplemented
 	case codes.Unavailable:
 		return http.StatusServiceUnavailable
+	case codes.InvalidArgument:
+	case codes.FailedPrecondition:
+	case codes.OutOfRange:
+		return http.StatusBadRequest
 	case codes.Internal:
 	case codes.DataLoss:
+	case codes.Unknown:
 		return http.StatusInternalServerError
 	default:
 		return http.StatusInternalServerError
 	}
 
 	return http.StatusInternalServerError
+}
+
+func ToException(err error) interfaces.IException {
+	if err == nil {
+		return nil
+	}
+
+	grpcError, ok := status.FromError(err)
+	if grpcError == nil && !ok {
+		return exceptions.FromError(err)
+	}
+
+	return exceptions.New(grpcError.Message(), HttpCode(grpcError.Code()))
 }

@@ -109,3 +109,7 @@ func Rabbit(connectionString string, heartbeat time.Duration) (*rabbit_event.Eve
 func ShutDownAction(action func()) {
 	addShutDownAction(action)
 }
+
+func IsGrpc() bool {
+	return _useGrpc
+}
