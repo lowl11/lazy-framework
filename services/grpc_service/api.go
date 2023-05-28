@@ -37,7 +37,7 @@ func (service *Service) Singleton() (*grpc.ClientConn, error) {
 		log.Info("gRPC client connection closed!")
 	})
 
-	return nil, nil
+	return connection, nil
 }
 
 func (service *Service) Connection() (*grpc.ClientConn, error) {
