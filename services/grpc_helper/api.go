@@ -59,3 +59,11 @@ func ToException(err error) interfaces.IException {
 
 	return exceptions.New(grpcError.Message(), HttpCode(grpcError.Code()))
 }
+
+func IsCode(err error, code codes.Code) bool {
+	if grpcError, ok := status.FromError(err); ok {
+		return grpcError.Code() == code
+	}
+
+	return false
+}
