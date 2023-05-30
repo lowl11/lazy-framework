@@ -2,6 +2,7 @@ package domain
 
 import (
 	"github.com/lowl11/lazy-collection/array"
+	"github.com/lowl11/lazy-framework/services/error_helper"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"net/http"
@@ -38,7 +39,14 @@ func (exception *Exception) ToError() error {
 }
 
 func (exception *Exception) ToGrpc() error {
-	return status.Error(exception.grpcStatus, exception.Error())
+	grpcStatus := exception.grpcStatus
+	if exception.HttpStatus() != http.StatusInternalServerError && exception.GrpcStatus() == codes.Internal {
+		grpcStatus = error_helper.GrpcCode(exception.httpStatus)
+	}
+	if int(grpcStatus) == 0 {
+		grpcStatus = codes.Internal
+	}
+	return status.Error(grpcStatus, exception.Error())
 }
 
 func (exception *Exception) Business() string {

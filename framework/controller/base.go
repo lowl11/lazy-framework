@@ -5,7 +5,7 @@ import (
 	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazy-framework/data/interfaces"
 	"github.com/lowl11/lazy-framework/log"
-	"github.com/lowl11/lazy-framework/services/grpc_helper"
+	"github.com/lowl11/lazy-framework/services/error_helper"
 	"github.com/lowl11/lazy-framework/services/type_helper"
 	"github.com/lowl11/lazy-framework/services/validation"
 	"google.golang.org/grpc/codes"
@@ -20,7 +20,7 @@ func (controller *Base) Error(ctx echo.Context, err interfaces.IException) error
 	httpStatus := err.HttpStatus()
 	grpcStatus := err.GrpcStatus()
 	if httpStatus == http.StatusInternalServerError && grpcStatus != codes.Internal {
-		httpStatus = grpc_helper.HttpCode(grpcStatus)
+		httpStatus = error_helper.HttpCode(grpcStatus)
 	}
 
 	errorObject := &domain.Response{
