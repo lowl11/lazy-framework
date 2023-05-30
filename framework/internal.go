@@ -13,6 +13,7 @@ import (
 	"github.com/lowl11/lazy-framework/framework/grpc_server"
 	"github.com/lowl11/lazy-framework/log"
 	"github.com/lowl11/lazy-framework/log/log_internal"
+	"github.com/lowl11/lazy-framework/services/error_helper"
 	"github.com/lowl11/lazylog/logapi/log_levels"
 	"os"
 	"os/signal"
@@ -171,6 +172,8 @@ func initGrpcServer(frameworkConfig *Config) {
 	if !frameworkConfig.UseGRPC {
 		return
 	}
+
+	error_helper.LogGrpc = frameworkConfig.LogGRPC
 
 	_useGrpc = frameworkConfig.UseGRPC
 	_grpcServerMutex.Lock()

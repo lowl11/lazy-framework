@@ -37,6 +37,7 @@ type Config struct {
 	// grpc
 	UseGRPC  bool
 	OnlyGRPC bool
+	LogGRPC  bool
 }
 
 func Init(config *Config) {

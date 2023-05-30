@@ -40,13 +40,23 @@ func (exception *Exception) ToError() error {
 
 func (exception *Exception) ToGrpc() error {
 	grpcStatus := exception.grpcStatus
+
+	// if was set httpStatus but not grpcStatus
 	if exception.HttpStatus() != http.StatusInternalServerError && exception.GrpcStatus() == codes.Internal {
 		grpcStatus = error_helper.GrpcCode(exception.httpStatus)
 	}
+
+	// if grpcStatus is empty
 	if int(grpcStatus) == 0 {
 		grpcStatus = codes.Internal
 	}
-	return status.Error(grpcStatus, exception.Error())
+
+	grpcError := status.Error(grpcStatus, exception.Error())
+
+	// log gRPC error
+	error_helper.LogGrpcError(grpcError)
+
+	return grpcError
 }
 
 func (exception *Exception) Business() string {

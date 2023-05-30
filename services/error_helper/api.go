@@ -1,9 +1,12 @@
 package error_helper
 
 import (
+	"github.com/lowl11/lazy-framework/log"
 	"google.golang.org/grpc/codes"
 	"net/http"
 )
+
+var LogGrpc bool
 
 func HttpCode(code codes.Code) int {
 	switch code {
@@ -73,4 +76,12 @@ func GrpcCode(httpCode int) codes.Code {
 	}
 
 	return codes.Internal
+}
+
+func LogGrpcError(err error) {
+	if !LogGrpc {
+		return
+	}
+
+	log.Error(err)
 }
