@@ -7,13 +7,19 @@ import (
 
 func New(businessMessage string, statuses ...int) interfaces.IException {
 	var httpStatus int
+	var grpcStatus int
+
 	if len(statuses) > 0 {
 		httpStatus = statuses[0]
+	}
+	if len(statuses) > 1 {
+		grpcStatus = statuses[1]
 	}
 
 	return domain.NewException(
 		businessMessage,
 		httpStatus,
+		grpcStatus,
 	)
 }
 
@@ -22,13 +28,20 @@ func FromError(err error, status ...int) interfaces.IException {
 		return nil
 	}
 
-	var errorStatus int
+	var httpStatus int
+	var grpcStatus int
+
 	if len(status) > 0 {
-		errorStatus = status[0]
+		httpStatus = status[0]
+	}
+
+	if len(status) > 1 {
+		grpcStatus = status[1]
 	}
 
 	return domain.NewException(
 		err.Error(),
-		errorStatus,
+		httpStatus,
+		grpcStatus,
 	)
 }

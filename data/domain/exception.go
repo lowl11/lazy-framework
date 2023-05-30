@@ -2,6 +2,8 @@ package domain
 
 import (
 	"github.com/lowl11/lazy-collection/array"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"net/http"
 	"strings"
 )
@@ -9,14 +11,16 @@ import (
 type Exception struct {
 	BusinessMessage string `json:"business_message,omitempty"`
 	httpStatus      int
+	grpcStatus      codes.Code
 
 	withinErrors []error
 }
 
-func NewException(businessMessage string, status int) *Exception {
+func NewException(businessMessage string, httpStatus, grpcStatus int) *Exception {
 	return &Exception{
 		BusinessMessage: businessMessage,
-		httpStatus:      status,
+		httpStatus:      httpStatus,
+		grpcStatus:      codes.Code(grpcStatus),
 		withinErrors:    make([]error, 0),
 	}
 }
@@ -31,6 +35,10 @@ func (exception *Exception) ToString() string {
 
 func (exception *Exception) ToError() error {
 	return exception
+}
+
+func (exception *Exception) ToGrpc() error {
+	return status.Error(exception.grpcStatus, exception.Error())
 }
 
 func (exception *Exception) Business() string {
@@ -53,6 +61,14 @@ func (exception *Exception) HttpStatus() int {
 	}
 
 	return exception.httpStatus
+}
+
+func (exception *Exception) GrpcStatus() codes.Code {
+	if exception.grpcStatus == 0 {
+		return codes.Internal
+	}
+
+	return exception.grpcStatus
 }
 
 func (exception *Exception) copy() *Exception {

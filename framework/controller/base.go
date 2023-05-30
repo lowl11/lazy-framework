@@ -5,8 +5,10 @@ import (
 	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazy-framework/data/interfaces"
 	"github.com/lowl11/lazy-framework/log"
+	"github.com/lowl11/lazy-framework/services/grpc_helper"
 	"github.com/lowl11/lazy-framework/services/type_helper"
 	"github.com/lowl11/lazy-framework/services/validation"
+	"google.golang.org/grpc/codes"
 	"net/http"
 )
 
@@ -15,12 +17,18 @@ type Base struct{}
 func (controller *Base) Error(ctx echo.Context, err interfaces.IException) error {
 	log.Error(err.ToError())
 
+	httpStatus := err.HttpStatus()
+	grpcStatus := err.GrpcStatus()
+	if httpStatus == http.StatusInternalServerError && grpcStatus != codes.Internal {
+		httpStatus = grpc_helper.HttpCode(grpcStatus)
+	}
+
 	errorObject := &domain.Response{
 		Status:       "ERROR",
 		Message:      err.Business(),
 		InnerMessage: err.Tech(),
 	}
-	return ctx.JSON(err.HttpStatus(), errorObject)
+	return ctx.JSON(httpStatus, errorObject)
 }
 
 func (controller *Base) NotFound(ctx echo.Context, err interfaces.IException) error {
