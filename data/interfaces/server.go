@@ -10,7 +10,7 @@ type IServer interface {
 	Start(port string)
 	StartHttp2(port string)
 	SetHttp2Config(config *domain.Http2Config)
-	ActivateSwagger()
+	ActivateSwagger(customEndpoint ...string)
 }
 
 type IEchoServer interface {

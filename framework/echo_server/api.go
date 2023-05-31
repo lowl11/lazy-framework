@@ -45,9 +45,14 @@ func (server *Server) SetHttp2Config(config *domain.Http2Config) {
 	server.http2Config = config
 }
 
-func (server *Server) ActivateSwagger() {
+func (server *Server) ActivateSwagger(customEndpoint ...string) {
+	endpoint := "/swagger/*"
+	if len(customEndpoint) > 0 {
+		endpoint = customEndpoint[0]
+	}
+
 	// activating swagger endpoints
-	server.server.GET("/swagger/*", echoSwagger.EchoWrapHandler())
+	server.server.GET(endpoint, echoSwagger.EchoWrapHandler())
 }
 
 func (server *Server) Get() *echo.Echo {
