@@ -1,6 +1,17 @@
 package validation
 
-import "reflect"
+import (
+	"errors"
+	"reflect"
+)
+
+func newError(name string) error {
+	return errors.New("Field " + name + " is null or empty, but it's required")
+}
+
+func newNumeric(name string) error {
+	return errors.New("Field " + name + " is null or zero, but it's required")
+}
 
 func isInteger(value any) bool {
 	switch reflect.TypeOf(value).Kind() {
