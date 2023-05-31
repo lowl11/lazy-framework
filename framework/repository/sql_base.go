@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/lowl11/lazy-framework/events"
 	"github.com/lowl11/lazy-framework/events/script_event"
@@ -22,6 +23,10 @@ func NewSqlBase() SqlBase {
 	return SqlBase{
 		script: events.Script,
 	}
+}
+
+func (repo *SqlBase) Guid() string {
+	return uuid.New().String()
 }
 
 func (repo *SqlBase) StartScript(name string) string {

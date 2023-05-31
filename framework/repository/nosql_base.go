@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"github.com/google/uuid"
 	"github.com/lowl11/lazy-framework/log"
 	"go.mongodb.org/mongo-driver/mongo"
 	"time"
@@ -13,6 +14,10 @@ type NoSqlBase struct {
 
 func NewNoSqlBase() NoSqlBase {
 	return NoSqlBase{}
+}
+
+func (repo *NoSqlBase) Guid() string {
+	return uuid.New().String()
 }
 
 func (repo *NoSqlBase) Ctx(customTimeout ...time.Duration) (context.Context, func()) {

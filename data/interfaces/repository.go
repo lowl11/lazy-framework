@@ -8,6 +8,7 @@ import (
 
 type IRepository interface {
 	Ctx(customTimeout ...time.Duration) (context.Context, func())
+	Guid() string
 }
 
 type ISqlRepository interface {
