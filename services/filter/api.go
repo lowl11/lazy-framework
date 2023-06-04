@@ -9,3 +9,11 @@ func String(value string) string {
 func StringSimple(value string) string {
 	return strings.TrimSpace(value)
 }
+
+func PtrValue(value *string) string {
+	if value != nil {
+		return *value
+	}
+
+	return ""
+}
