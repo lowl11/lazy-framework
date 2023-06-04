@@ -3,6 +3,7 @@ package postgres_service
 import (
 	"context"
 	"github.com/jmoiron/sqlx"
+	"github.com/lowl11/lazy-framework/framework"
 	"github.com/lowl11/lazy-framework/log"
 	"time"
 
@@ -31,6 +32,14 @@ func (service *Service) ConnectionPool() (*sqlx.DB, error) {
 		return nil, err
 	}
 	log.Info("Ping Postgres database connection pool done!")
+
+	framework.ShutDownAction(func() {
+		if err = connectionPool.Close(); err != nil {
+			log.Error(err, "Close Postgres connection error")
+			return
+		}
+		log.Info("Postgres connection closed!")
+	})
 
 	return connectionPool, nil
 }
