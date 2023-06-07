@@ -38,8 +38,12 @@ func IsProduction() bool {
 	return strings.ToLower(Env()) == "production"
 }
 
-func IsLocal() bool {
-	return strings.ToLower(Env()) == "local"
+func IsDev() bool {
+	return strings.ToLower(Env()) == "dev"
+}
+
+func IsTest() bool {
+	return strings.ToLower(Env()) == "test"
 }
 
 func SetEnvironmentName(name string) {
