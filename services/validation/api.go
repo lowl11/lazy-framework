@@ -2,6 +2,7 @@ package validation
 
 import (
 	"errors"
+	"unicode"
 )
 
 func Required(value any, name string) error {
@@ -29,4 +30,23 @@ func Required(value any, name string) error {
 
 func IsPrimitive(value any) bool {
 	return isInteger(value) || isString(value) || isBool(value) || isFloat(value)
+}
+
+func IsLower(value string) bool {
+	for _, r := range value {
+		if !unicode.IsLower(r) && unicode.IsLetter(r) {
+			return false
+		}
+	}
+	return true
+
+}
+
+func IsUpper(value string) bool {
+	for _, r := range value {
+		if !unicode.IsUpper(r) && unicode.IsLetter(r) {
+			return false
+		}
+	}
+	return true
 }
