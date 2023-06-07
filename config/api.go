@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/lowl11/lazy-framework/services/os_helper"
 	"github.com/lowl11/lazyconfig/confapi"
 	"github.com/lowl11/lazyconfig/config_data"
 	"os"
@@ -18,7 +19,11 @@ func Init() {
 }
 
 func Get(key string) string {
-	return confapi.Get(key)
+	value := confapi.Get(key)
+	if value == "" {
+		value = os_helper.Get(key)
+	}
+	return value
 }
 
 func Env() string {

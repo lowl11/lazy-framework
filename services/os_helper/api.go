@@ -1,4 +1,4 @@
-package network_helper
+package os_helper
 
 import (
 	"github.com/lowl11/lazy-framework/log"
@@ -12,6 +12,10 @@ func NoProxy(hosts ...string) {
 	}
 
 	SetEnv("no_proxy", strings.Join(hosts, ","))
+}
+
+func Get(key string) string {
+	return os.Getenv(key)
 }
 
 func SetEnv(key, value string) {
