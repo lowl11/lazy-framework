@@ -17,7 +17,7 @@ func (service *Service) connect() (*grpc.ClientConn, error) {
 
 	// set no proxy
 	if service.noProxy {
-		grpc.WithNoProxy()
+		options = append(options, grpc.WithNoProxy())
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), service.timeout)
