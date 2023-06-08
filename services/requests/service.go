@@ -25,6 +25,7 @@ type Service struct {
 	request *http.Request
 
 	sslCheck bool
+	noProxy  bool
 
 	status int
 }

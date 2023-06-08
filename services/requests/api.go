@@ -21,6 +21,11 @@ func (service *Service) SslTrust() *Service {
 	return service
 }
 
+func (service *Service) NoProxy() *Service {
+	service.noProxy = true
+	return service
+}
+
 func (service *Service) Timeout(seconds time.Duration) *Service {
 	service.timeout = seconds
 	service.customTimeout = true
@@ -101,8 +106,13 @@ func (service *Service) Send() ([]byte, error) {
 
 	client := http.Client{
 		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: !service.sslCheck},
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: !service.sslCheck,
+			},
 		},
+	}
+	if service.noProxy {
+		client.Transport.(*http.Transport).Proxy = nil
 	}
 	response, err := client.Do(request)
 	if err != nil {
