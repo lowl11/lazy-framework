@@ -2,12 +2,14 @@ package grpc_service
 
 import (
 	"context"
+	"crypto/tls"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/credentials"
 )
 
 func (service *Service) connect() (*grpc.ClientConn, error) {
-	creds := insecure.NewCredentials()
+	//creds := insecure.NewCredentials()
+	creds := credentials.NewTLS(&tls.Config{InsecureSkipVerify: true})
 	if service.creds != nil {
 		creds = service.creds
 	}
