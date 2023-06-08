@@ -7,10 +7,12 @@ import (
 )
 
 type Service struct {
-	host    string
-	creds   credentials.TransportCredentials
-	opts    []grpc.DialOption
-	timeout time.Duration
+	host     string
+	creds    credentials.TransportCredentials
+	opts     []grpc.DialOption
+	timeout  time.Duration
+	noProxy  bool
+	sslCheck bool
 }
 
 func New(host string) *Service {

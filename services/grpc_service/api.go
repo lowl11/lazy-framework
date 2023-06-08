@@ -23,6 +23,16 @@ func (service *Service) Timeout(duration time.Duration) *Service {
 	return service
 }
 
+func (service *Service) NoProxy() *Service {
+	service.noProxy = true
+	return service
+}
+
+func (service *Service) SslTrust() *Service {
+	service.sslCheck = true
+	return service
+}
+
 func (service *Service) Singleton() (*grpc.ClientConn, error) {
 	connection, err := service.connect()
 	if err != nil {

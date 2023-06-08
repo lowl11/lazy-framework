@@ -10,8 +10,8 @@ type Server struct {
 	listener net.Listener
 }
 
-func New() *Server {
+func New(options ...grpc.ServerOption) *Server {
 	return &Server{
-		server: grpc.NewServer(),
+		server: grpc.NewServer(options...),
 	}
 }
