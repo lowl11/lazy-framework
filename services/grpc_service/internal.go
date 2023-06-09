@@ -30,7 +30,3 @@ func (service *Service) connect() (*grpc.ClientConn, error) {
 
 	return connection, nil
 }
-
-func (service *Service) asd() {
-	//
-}
