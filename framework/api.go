@@ -1,6 +1,7 @@
 package framework
 
 import (
+	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
 	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazy-framework/data/interfaces"
@@ -108,6 +109,10 @@ func IsGrpc() bool {
 	return _useGrpc
 }
 
-func UseDatabase() bool {
+func DatabaseUse() bool {
 	return _useDatabase
+}
+
+func DatabaseConnection() *sqlx.DB {
+	return _connectionPool
 }
