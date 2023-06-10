@@ -70,9 +70,6 @@ func initFramework(frameworkConfig *Config) {
 	// gRPC server init
 	initGrpcServer(frameworkConfig)
 
-	// database init
-	initDatabase(frameworkConfig)
-
 	runShutDownWaiter()
 }
 
@@ -168,14 +165,14 @@ func initGrpcServer(frameworkConfig *Config) {
 	_grpcServer = grpc_server.New()
 }
 
-func initDatabase(frameworkConfig *Config) {
-	if frameworkConfig.DatabaseConnection == "" {
+func initDatabase(connectionString string) {
+	if connectionString == "" {
 		return
 	}
 
 	_useDatabase = true
 	connection, err := database_service.
-		New(frameworkConfig.DatabaseConnection).
+		New(connectionString).
 		ConnectionPool()
 	if err != nil {
 		log.Fatal(err, "Create Connection pool & ping error")

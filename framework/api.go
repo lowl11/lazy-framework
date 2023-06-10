@@ -38,9 +38,6 @@ type Config struct {
 	UseGRPC  bool
 	OnlyGRPC bool
 	LogGRPC  bool
-
-	// database
-	DatabaseConnection string
 }
 
 func Init(config *Config) {
@@ -49,6 +46,10 @@ func Init(config *Config) {
 	}
 
 	initFramework(config)
+}
+
+func InitDatabase(connectionString string) {
+	initDatabase(connectionString)
 }
 
 func StartServer(port string) {
