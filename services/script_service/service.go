@@ -1,12 +1,12 @@
-package script_event
+package script_service
 
-type Event struct {
+type Service struct {
 	startScripts map[string]string
 	scripts      map[string]any
 }
 
-func New() (*Event, error) {
-	event := &Event{
+func New() (*Service, error) {
+	event := &Service{
 		startScripts: make(map[string]string),
 		scripts:      make(map[string]any),
 	}

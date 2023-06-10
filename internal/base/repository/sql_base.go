@@ -4,24 +4,24 @@ import (
 	"context"
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
-	"github.com/lowl11/lazy-framework/internal/events"
-	"github.com/lowl11/lazy-framework/internal/events/script_event"
+	"github.com/lowl11/lazy-framework/internal/global_services"
+	"github.com/lowl11/lazy-framework/services/script_service"
 	"github.com/lowl11/lazylog/log"
 	"strings"
 	"time"
 )
 
 type SqlBase struct {
-	script *script_event.Event
+	script *script_service.Service
 }
 
 func NewSqlBase() SqlBase {
-	if events.Script == nil {
-		events.Init(true)
+	if global_services.Script == nil {
+		global_services.InitScript()
 	}
 
 	return SqlBase{
-		script: events.Script,
+		script: global_services.Script,
 	}
 }
 

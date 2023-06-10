@@ -8,7 +8,6 @@ import (
 	"github.com/lowl11/lazy-framework/helpers/error_helper"
 	"github.com/lowl11/lazy-framework/internal/controllers"
 	"github.com/lowl11/lazy-framework/internal/echo_server"
-	"github.com/lowl11/lazy-framework/internal/events"
 	"github.com/lowl11/lazy-framework/internal/grpc_server"
 	"github.com/lowl11/lazyconfig/config"
 	frameworkConfig "github.com/lowl11/lazyconfig/config"
@@ -56,9 +55,6 @@ func initFramework(frameworkConfig *Config) {
 
 	// log init
 	initLog(frameworkConfig)
-
-	// events init
-	events.Init(frameworkConfig.DatabaseConnection != "")
 
 	// controllers init
 	controllers.Init()

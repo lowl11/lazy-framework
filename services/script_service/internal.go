@@ -1,8 +1,8 @@
-package script_event
+package script_service
 
 import "github.com/lowl11/lazyfile/folderapi"
 
-func (event *Event) readStartScripts() error {
+func (event *Service) readStartScripts() error {
 	if !folderapi.Exist("resources/scripts/start") {
 		return nil
 	}
@@ -28,7 +28,7 @@ func (event *Event) readStartScripts() error {
 	return nil
 }
 
-func (event *Event) readScripts() error {
+func (event *Service) readScripts() error {
 	if !folderapi.Exist("resources/scripts") {
 		return nil
 	}
