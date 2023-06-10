@@ -6,11 +6,13 @@ var (
 	Script *script_event.Event
 )
 
-func Init() {
+func Init(useDatabase bool) {
 	var err error
 
-	Script, err = script_event.New()
-	if err != nil {
-		panic(err)
+	if useDatabase {
+		Script, err = script_event.New()
+		if err != nil {
+			panic(err)
+		}
 	}
 }

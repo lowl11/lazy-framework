@@ -4,10 +4,10 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazy-framework/data/interfaces"
+	"github.com/lowl11/lazy-framework/helpers/error_helper"
+	"github.com/lowl11/lazy-framework/helpers/type_helper"
+	"github.com/lowl11/lazy-framework/helpers/validation"
 	"github.com/lowl11/lazy-framework/log"
-	"github.com/lowl11/lazy-framework/services/error_helper"
-	"github.com/lowl11/lazy-framework/services/type_helper"
-	"github.com/lowl11/lazy-framework/services/validation"
 	"google.golang.org/grpc/codes"
 	"net/http"
 )

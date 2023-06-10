@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/lowl11/lazy-framework/services/os_helper"
+	"github.com/lowl11/lazy-framework/helpers/os_helper"
 	"github.com/lowl11/lazyconfig/confapi"
 	"github.com/lowl11/lazyconfig/config_data"
 	"os"

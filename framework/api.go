@@ -38,6 +38,9 @@ type Config struct {
 	UseGRPC  bool
 	OnlyGRPC bool
 	LogGRPC  bool
+
+	// database
+	DatabaseConnection string
 }
 
 func Init(config *Config) {

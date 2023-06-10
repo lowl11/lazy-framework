@@ -4,23 +4,25 @@ import (
 	"context"
 	"github.com/jmoiron/sqlx"
 	"github.com/lowl11/lazy-framework/framework"
+	"github.com/lowl11/lazy-framework/helpers/database_helper"
 	"github.com/lowl11/lazy-framework/log"
 	"time"
-
-	_ "github.com/lib/pq"
 )
 
 func (service *Service) ConnectionPool() (*sqlx.DB, error) {
+	if service.connectionPool != nil {
+		return service.connectionPool, nil
+	}
+
 	// connection pool for Postgres
-	connectionPool, err := sqlx.Open("postgres", service.connectionString)
+	connectionPool, err := database_helper.ConnectionPool(
+		service.connectionString,
+		service.maxConnections,
+		service.maxLifetime,
+	)
 	if err != nil {
 		return nil, err
 	}
-
-	// setting connection pool configurations
-	connectionPool.SetMaxOpenConns(service.maxConnections)
-	connectionPool.SetMaxIdleConns(service.maxConnections)
-	connectionPool.SetConnMaxIdleTime(time.Duration(service.maxLifetime) * time.Minute)
 
 	// ping database
 	log.Info("Ping Postgres database connection pool...")
@@ -41,6 +43,7 @@ func (service *Service) ConnectionPool() (*sqlx.DB, error) {
 		log.Info("Postgres connection closed!")
 	})
 
+	service.connectionPool = connectionPool
 	return connectionPool, nil
 }
 
@@ -49,15 +52,15 @@ func (service *Service) Connection() (*sqlx.DB, error) {
 	defer cancel()
 
 	// connection for Postgres
-	connection, err := sqlx.ConnectContext(ctx, "postgres", service.connectionString)
+	connection, err := database_helper.Connection(
+		service.connectionString,
+		service.maxConnections,
+		service.maxLifetime,
+		time.Second*5,
+	)
 	if err != nil {
 		return nil, err
 	}
-
-	// setting connection configurations
-	connection.SetMaxOpenConns(service.maxConnections)
-	connection.SetMaxIdleConns(service.maxConnections)
-	connection.SetConnMaxIdleTime(time.Duration(service.maxLifetime) * time.Minute)
 
 	log.Info("Ping Postgres database connection...")
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second*30)

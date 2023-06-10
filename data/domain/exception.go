@@ -2,7 +2,7 @@ package domain
 
 import (
 	"github.com/lowl11/lazy-collection/array"
-	"github.com/lowl11/lazy-framework/services/error_helper"
+	"github.com/lowl11/lazy-framework/helpers/error_helper"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"net/http"
