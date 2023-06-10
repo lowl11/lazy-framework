@@ -1,7 +1,7 @@
 package error_helper
 
 import (
-	"github.com/lowl11/lazy-framework/log"
+	"github.com/lowl11/lazylog/log"
 	"google.golang.org/grpc/codes"
 	"net/http"
 )

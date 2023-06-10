@@ -1,7 +1,7 @@
 package os_helper
 
 import (
-	"github.com/lowl11/lazy-framework/log"
+	"github.com/lowl11/lazylog/log"
 	"os"
 	"strings"
 )

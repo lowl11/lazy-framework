@@ -2,7 +2,7 @@ package grpc_service
 
 import (
 	"github.com/lowl11/lazy-framework/framework"
-	"github.com/lowl11/lazy-framework/log"
+	"github.com/lowl11/lazylog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"time"

@@ -1,7 +1,7 @@
 package grpc_server
 
 import (
-	"github.com/lowl11/lazy-framework/log"
+	"github.com/lowl11/lazylog/log"
 	"google.golang.org/grpc"
 	"net"
 )

@@ -12,7 +12,7 @@ package main
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/lowl11/lazy-framework/framework"
-	"github.com/lowl11/lazy-framework/log"
+	"github.com/lowl11/lazylog/log"
 	"net/http"
 	"time"
 )
@@ -70,7 +70,7 @@ Call log from anywhere!
 ```go
 package main
 
-import "github.com/lowl11/lazy-framework/log"
+import "github.com/lowl11/lazylog/log"
 
 func main() {
 	log.Info("test message", 1, true, false)
@@ -103,7 +103,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/lowl11/lazy-framework/config"
+	"github.com/lowl11/lazyconfig/config"
 )
 
 func main() {

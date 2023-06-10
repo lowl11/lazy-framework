@@ -5,7 +5,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"encoding/xml"
-	"github.com/lowl11/lazy-framework/log"
+	"github.com/lowl11/lazylog/log"
 	"io/ioutil"
 	"net/http"
 	"time"

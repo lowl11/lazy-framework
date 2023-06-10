@@ -56,12 +56,12 @@ github.com/lowl11/lazy-collection v0.1.2 h1:XHN+2oCaScuwwSZ+zCk7MajXZTcQq85tZsgS
 github.com/lowl11/lazy-collection v0.1.2/go.mod h1:lylgx1YEzW9bl/rxT90sy+GzGmnmhe+n4ksX4Nqsy34=
 github.com/lowl11/lazy-rmq v0.0.6 h1:gMqbfczltVGSCMX8pHOiKV9lv9zB9+U1IfiVm4O8rkg=
 github.com/lowl11/lazy-rmq v0.0.6/go.mod h1:qCBm+6lvfp7DindkD5sVNHywYIwgvKlO5RFDnJUwxaM=
-github.com/lowl11/lazyconfig v1.1.5 h1:ShmpelVHfZV9WzEknFAkp7kuDW56QRvTpsWrdf2wCRs=
-github.com/lowl11/lazyconfig v1.1.5/go.mod h1:iJm8cDxouTpe9xVoSeS+M8XKUrHqHEhJrf3/13b439U=
+github.com/lowl11/lazyconfig v1.1.6 h1:oe0+dO7TxR1hZN9C+xwMXmurb5ZAr8mp2DIGD49vPS0=
+github.com/lowl11/lazyconfig v1.1.6/go.mod h1:iJm8cDxouTpe9xVoSeS+M8XKUrHqHEhJrf3/13b439U=
 github.com/lowl11/lazyfile v0.1.1 h1:RWx1rJug0zLVipBdxarJlowMQSy+mTiiU2S5TROAeK4=
 github.com/lowl11/lazyfile v0.1.1/go.mod h1:qcGLmys85GL2O9Rr2Gk/I6JieY0CBifeMsGUWHtMNNg=
-github.com/lowl11/lazylog v1.2.4 h1:Lco5kcHDq+C8ZZVsZQevXiMvVHZ2Cvalpgu1k+6Kt0c=
-github.com/lowl11/lazylog v1.2.4/go.mod h1:UxtTcAsP2Z1NNrWJq0YwWXUPlWBV/jzXaHB4jBe1K5s=
+github.com/lowl11/lazylog v1.2.5 h1:kjZnj+BhW9lFqf2wh2Dw9huKQ4La5oMDfceNyyUFFQg=
+github.com/lowl11/lazylog v1.2.5/go.mod h1:UxtTcAsP2Z1NNrWJq0YwWXUPlWBV/jzXaHB4jBe1K5s=
 github.com/mailru/easyjson v0.0.0-20190614124828-94de47d64c63/go.mod h1:C1wdFJiN94OJF2b5HbByQZoLdCWB1Yqtg26g4irojpc=
 github.com/mailru/easyjson v0.0.0-20190626092158-b2ccc519800e/go.mod h1:C1wdFJiN94OJF2b5HbByQZoLdCWB1Yqtg26g4irojpc=
 github.com/mailru/easyjson v0.7.6/go.mod h1:xzfreul335JAWq5oZzymOObrkdz5UnU4kGfJJLY9Nlc=

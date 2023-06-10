@@ -6,7 +6,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/lowl11/lazy-framework/events"
 	"github.com/lowl11/lazy-framework/events/script_event"
-	"github.com/lowl11/lazy-framework/log"
+	"github.com/lowl11/lazylog/log"
 	"strings"
 	"time"
 )

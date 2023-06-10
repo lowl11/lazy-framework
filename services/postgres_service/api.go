@@ -5,7 +5,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/lowl11/lazy-framework/framework"
 	"github.com/lowl11/lazy-framework/helpers/database_helper"
-	"github.com/lowl11/lazy-framework/log"
+	"github.com/lowl11/lazylog/log"
 	"time"
 )
 

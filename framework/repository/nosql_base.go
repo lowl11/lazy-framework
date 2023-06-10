@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 	"github.com/google/uuid"
-	"github.com/lowl11/lazy-framework/log"
+	"github.com/lowl11/lazylog/log"
 	"go.mongodb.org/mongo-driver/mongo"
 	"time"
 )

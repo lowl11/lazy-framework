@@ -3,7 +3,7 @@ package job
 import (
 	"github.com/go-co-op/gocron"
 	"github.com/lowl11/lazy-framework/data/domain"
-	"github.com/lowl11/lazy-framework/log"
+	"github.com/lowl11/lazylog/log"
 )
 
 func (job *Job) Run() {

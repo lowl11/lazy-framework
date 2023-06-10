@@ -4,8 +4,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazy-framework/data/interfaces"
-	"github.com/lowl11/lazy-framework/log"
 	"github.com/lowl11/lazy-rmq/rabbit_event"
+	"github.com/lowl11/lazylog/log"
 	"github.com/lowl11/lazylog/logapi"
 	"time"
 )

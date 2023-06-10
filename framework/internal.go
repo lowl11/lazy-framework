@@ -3,8 +3,6 @@ package framework
 import (
 	"errors"
 	"github.com/lowl11/lazy-collection/safe_array"
-	"github.com/lowl11/lazy-framework/config"
-	frameworkConfig "github.com/lowl11/lazy-framework/config"
 	"github.com/lowl11/lazy-framework/controllers"
 	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazy-framework/data/interfaces"
@@ -12,8 +10,10 @@ import (
 	"github.com/lowl11/lazy-framework/framework/echo_server"
 	"github.com/lowl11/lazy-framework/framework/grpc_server"
 	"github.com/lowl11/lazy-framework/helpers/error_helper"
-	"github.com/lowl11/lazy-framework/log"
-	"github.com/lowl11/lazy-framework/log/log_internal"
+	"github.com/lowl11/lazyconfig/config"
+	frameworkConfig "github.com/lowl11/lazyconfig/config"
+	"github.com/lowl11/lazylog/log"
+	"github.com/lowl11/lazylog/log/log_internal"
 	"github.com/lowl11/lazylog/logapi/log_levels"
 	"os"
 	"os/signal"
@@ -51,13 +51,11 @@ func initFramework(frameworkConfig *Config) {
 		_initDone = true
 	}()
 
-	// log init
-	initLog(frameworkConfig)
-	log_internal.Init()
-
 	// config init
 	initConfig(frameworkConfig)
-	config.Init()
+
+	// log init
+	initLog(frameworkConfig)
 
 	// events init
 	events.Init(frameworkConfig.DatabaseConnection != "")
@@ -75,44 +73,28 @@ func initFramework(frameworkConfig *Config) {
 }
 
 func initLog(config *Config) {
-	// file logger
-	log_internal.SetConfig(config.LogFileName, config.LogFolderName)
-
-	// custom loggers
-	if config.CustomLoggers != nil {
-		log_internal.SetCustom(config.CustomLoggers...)
+	logLevel := config.LogLevel
+	if config.LogLevel == 0 && frameworkConfig.IsProduction() {
+		logLevel = log_levels.INFO
 	}
 
-	// modes
-	if config.LogNoTime {
-		log_internal.SetNoTimeMode()
-	}
-
-	if config.LogJson {
-		log_internal.SetJsonMode()
-	}
-
-	if config.LogNoPrefix {
-		log_internal.SetNoPrefixMode()
-	}
-
-	if config.LogNoFile {
-		log_internal.SetNoFileMode()
-	}
-
-	if config.LogLevel > 0 {
-		log_internal.SetLogLevel(config.LogLevel)
-	} else {
-		if frameworkConfig.IsProduction() {
-			log_internal.SetLogLevel(log_levels.INFO)
-		}
-	}
+	log_internal.Init(log_internal.LogConfig{
+		FileName:      config.LogFileName,
+		FolderName:    config.LogFolderName,
+		NoFile:        config.LogNoFile,
+		NoTime:        config.LogNoTime,
+		NoPrefix:      config.LogNoPrefix,
+		JsonMode:      config.LogJson,
+		LogLevel:      logLevel,
+		CustomLoggers: config.CustomLoggers,
+	})
 }
 
 func initConfig(frameworkConfig *Config) {
 	config.SetEnvironmentName(frameworkConfig.EnvironmentName)
 	config.SetEnvironmentDefault(frameworkConfig.EnvironmentDefault)
 	config.SetEnvironmentFileName(frameworkConfig.EnvironmentFileName)
+	config.Init()
 }
 
 func initServer(frameworkConfig *Config) {

@@ -7,7 +7,7 @@ import (
 	"github.com/lowl11/lazy-framework/helpers/error_helper"
 	"github.com/lowl11/lazy-framework/helpers/type_helper"
 	"github.com/lowl11/lazy-framework/helpers/validation"
-	"github.com/lowl11/lazy-framework/log"
+	"github.com/lowl11/lazylog/log"
 	"google.golang.org/grpc/codes"
 	"net/http"
 )
