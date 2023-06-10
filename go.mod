@@ -7,7 +7,7 @@ require (
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/labstack/echo/v4 v4.10.2
 	github.com/lowl11/lazy-collection v0.1.2
-	github.com/lowl11/lazy-entity v0.0.6
+	github.com/lowl11/lazy-entity v0.0.9
 	github.com/lowl11/lazyconfig v1.1.6
 	github.com/lowl11/lazylog v1.2.5
 	github.com/swaggo/echo-swagger v1.4.0
