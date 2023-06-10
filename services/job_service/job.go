@@ -1,4 +1,4 @@
-package job
+package job_service
 
 import (
 	"github.com/go-co-op/gocron"

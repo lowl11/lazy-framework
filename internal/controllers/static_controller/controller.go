@@ -1,6 +1,8 @@
 package static_controller
 
-import "github.com/lowl11/lazy-framework/framework/controller"
+import (
+	"github.com/lowl11/lazy-framework/internal/base/controller"
+)
 
 type Controller struct {
 	controller.Base

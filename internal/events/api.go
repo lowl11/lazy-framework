@@ -1,6 +1,8 @@
 package events
 
-import "github.com/lowl11/lazy-framework/events/script_event"
+import (
+	"github.com/lowl11/lazy-framework/internal/events/script_event"
+)
 
 var (
 	Script *script_event.Event

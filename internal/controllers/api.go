@@ -1,6 +1,8 @@
 package controllers
 
-import "github.com/lowl11/lazy-framework/controllers/static_controller"
+import (
+	"github.com/lowl11/lazy-framework/internal/controllers/static_controller"
+)
 
 var (
 	Static *static_controller.Controller
