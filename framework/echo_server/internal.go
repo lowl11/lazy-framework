@@ -3,7 +3,7 @@ package echo_server
 import (
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/lowl11/lazy-framework/controllers"
-	"github.com/lowl11/lazy-framework/middlewares/echo_middlewares"
+	"github.com/lowl11/lazy-framework/framework/middlewares/echo_middlewares"
 )
 
 func (server *Server) setMiddlewares() {

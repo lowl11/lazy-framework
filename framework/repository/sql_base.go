@@ -17,7 +17,7 @@ type SqlBase struct {
 
 func NewSqlBase() SqlBase {
 	if events.Script == nil {
-		panic("'script event' is NULL")
+		events.Init(true)
 	}
 
 	return SqlBase{
