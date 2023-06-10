@@ -107,3 +107,7 @@ func ShutDownAction(action func()) {
 func IsGrpc() bool {
 	return _useGrpc
 }
+
+func UseDatabase() bool {
+	return _useDatabase
+}

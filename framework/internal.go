@@ -38,6 +38,8 @@ var (
 	_grpcServer      interfaces.IGRPCServer
 	_grpcServerMutex sync.Mutex
 
+	_useDatabase bool
+
 	_shutDownActions *safe_array.Array[func()]
 )
 
@@ -64,6 +66,9 @@ func initFramework(frameworkConfig *Config) {
 
 	// gRPC server init
 	initGrpcServer(frameworkConfig)
+
+	// database init
+	initDatabase(frameworkConfig)
 
 	runShutDownWaiter()
 }
@@ -158,6 +163,14 @@ func initGrpcServer(frameworkConfig *Config) {
 	defer _grpcServerMutex.Unlock()
 
 	_grpcServer = grpc_server.New()
+}
+
+func initDatabase(frameworkConfig *Config) {
+	if frameworkConfig.DatabaseConnection == "" {
+		return
+	}
+
+	_useDatabase = true
 }
 
 func addShutDownAction(action func()) {
