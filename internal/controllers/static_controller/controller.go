@@ -1,7 +1,7 @@
 package static_controller
 
 import (
-	"github.com/lowl11/lazy-framework/internal/base/controller"
+	"github.com/lowl11/lazy-framework/base/controller"
 )
 
 type Controller struct {
