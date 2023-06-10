@@ -9,7 +9,6 @@ require (
 	github.com/labstack/echo/v4 v4.10.2
 	github.com/lib/pq v1.2.0
 	github.com/lowl11/lazy-collection v0.1.2
-	github.com/lowl11/lazy-rmq v0.0.6
 	github.com/lowl11/lazyconfig v1.1.6
 	github.com/lowl11/lazyfile v0.1.1
 	github.com/lowl11/lazylog v1.2.5
@@ -38,7 +37,6 @@ require (
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/rabbitmq/amqp091-go v1.8.0 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/swaggo/files/v2 v2.0.0 // indirect
 	github.com/swaggo/swag v1.8.12 // indirect

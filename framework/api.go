@@ -4,7 +4,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazy-framework/data/interfaces"
-	"github.com/lowl11/lazy-rmq/rabbit_event"
 	"github.com/lowl11/lazylog/log"
 	"github.com/lowl11/lazylog/logapi"
 	"time"
@@ -99,15 +98,6 @@ func GrpcServer() interfaces.IGRPCServer {
 	}
 
 	return _grpcServer
-}
-
-func Rabbit(connectionString string, heartbeat time.Duration) (*rabbit_event.Event, error) {
-	rmqEvent, err := rabbit_event.NewConfig(connectionString, heartbeat)
-	if err != nil {
-		return nil, err
-	}
-
-	return rmqEvent, nil
 }
 
 func ShutDownAction(action func()) {
