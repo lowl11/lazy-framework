@@ -39,3 +39,13 @@ func ToString(anyValue any) string {
 		return fmt.Sprintf("%v", value)
 	}
 }
+
+func IsEmptySlice(value any) bool {
+	return reflect.ValueOf(value).Len() == 0
+}
+
+func IsSlice(value any) bool {
+	kind := reflect.TypeOf(value).Kind()
+	return kind == reflect.Slice ||
+		kind == reflect.Array
+}

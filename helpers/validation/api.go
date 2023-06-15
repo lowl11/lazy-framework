@@ -2,6 +2,7 @@ package validation
 
 import (
 	"errors"
+	"github.com/lowl11/lazy-framework/helpers/type_helper"
 	"unicode"
 )
 
@@ -23,6 +24,10 @@ func Required(value any, name string) error {
 	_, isFloat32 := value.(float32)
 	if isFloat32 && value.(float32) == 0 {
 		return newNumeric(name)
+	}
+
+	if type_helper.IsSlice(value) && type_helper.IsEmptySlice(value) {
+		return newError(name)
 	}
 
 	return nil
