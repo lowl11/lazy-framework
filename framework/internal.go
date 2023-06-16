@@ -65,7 +65,7 @@ func initFramework(frameworkConfig *Config) {
 	// gRPC server init
 	initGrpcServer(frameworkConfig)
 
-	runShutDownWaiter()
+	go runShutDownWaiter()
 }
 
 func initLog(config *Config) {
@@ -160,38 +160,32 @@ func initGrpcServer(frameworkConfig *Config) {
 	_grpcServer = grpc_server.New()
 }
 
-func addShutDownAction(action func()) {
-	_shutDownActions.Push(action)
-}
-
 func runShutDownWaiter() {
-	go func() {
-		// Create a channel to receive signals
-		signalChannel := make(chan os.Signal, 1)
+	// Create a channel to receive signals
+	signalChannel := make(chan os.Signal, 1)
 
-		// Notify the signal channel when a SIGINT or SIGTERM signal is received
-		signal.Notify(signalChannel, os.Interrupt, syscall.SIGTERM)
+	// Notify the signal channel when a SIGINT or SIGTERM signal is received
+	signal.Notify(signalChannel, os.Interrupt, syscall.SIGTERM)
 
-		<-signalChannel
+	<-signalChannel
 
-		_shutDownActions.Each(func(item func()) {
-			defer func() {
-				if value := recover(); value != nil {
-					var err error
-					if _, ok := value.(string); ok {
-						err = errors.New(value.(string))
-					} else if _, ok = value.(error); ok {
-						err = value.(error)
-					}
-					log.Error(err, "Catch panic from shut down action")
+	_shutDownActions.Each(func(item func()) {
+		defer func() {
+			if value := recover(); value != nil {
+				var err error
+				if _, ok := value.(string); ok {
+					err = errors.New(value.(string))
+				} else if _, ok = value.(error); ok {
+					err = value.(error)
 				}
-			}()
+				log.Error(err, "Catch panic from shut down action")
+			}
+		}()
 
-			// call action
-			item()
-		})
+		// call action
+		item()
+	})
 
-		// call shutdown
-		os.Exit(0)
-	}()
+	// call shutdown
+	os.Exit(0)
 }
