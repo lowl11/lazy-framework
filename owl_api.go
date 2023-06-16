@@ -4,32 +4,37 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/lowl11/lazylog/log"
 	"github.com/lowl11/owl/data/interfaces"
+	"google.golang.org/grpc"
 )
 
-func (lazy *Owl) ShutdownAction(action func()) {
-	lazy.shutdownService.Add(action)
+func (owl *Owl) ShutdownAction(action func()) {
+	owl.shutdownService.Add(action)
 }
 
-func (lazy *Owl) Start(port string) {
-	lazy.server.Start(port)
+func (owl *Owl) Start(port string) {
+	owl.server.Start(port)
 }
 
-func (lazy *Owl) StartHttp2(port string) {
-	lazy.server.StartHttp2(port)
+func (owl *Owl) StartHttp2(port string) {
+	owl.server.StartHttp2(port)
 }
 
-func (lazy *Owl) StartGrpc(port string) {
-	lazy.ShutdownAction(func() {
-		if err := lazy.grpcServer.Close(); err != nil {
+func (owl *Owl) StartGrpc(port string) {
+	owl.ShutdownAction(func() {
+		if err := owl.grpcServer.Close(); err != nil {
 			log.Error(err, "Close gRPC server connection error")
 			return
 		}
 		log.Info("gRPC server connection closed!")
 	})
 
-	lazy.getGrpcServer().Start(port)
+	owl.getGrpcServer().Start(port)
 }
 
-func (lazy *Owl) Echo() *echo.Echo {
-	return lazy.server.(interfaces.IEchoServer).Get()
+func (owl *Owl) Echo() *echo.Echo {
+	return owl.server.(interfaces.IEchoServer).Get()
+}
+
+func (owl *Owl) Grpc() *grpc.Server {
+	return owl.getGrpcServer().Get()
 }

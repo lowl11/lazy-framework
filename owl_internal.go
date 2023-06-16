@@ -23,108 +23,108 @@ const (
 	http2MaxReadFrameSize     = 1048576
 )
 
-func (lazy *Owl) getGrpcServer() interfaces.IGRPCServer {
-	if !lazy.config.UseGRPC {
+func (owl *Owl) getGrpcServer() interfaces.IGRPCServer {
+	if !owl.config.UseGRPC {
 		panic("Set flag UseGRPC in config")
 	}
 
-	lazy.grpcServerMutex.Lock()
-	defer lazy.grpcServerMutex.Unlock()
-	return lazy.grpcServer
+	owl.grpcServerMutex.Lock()
+	defer owl.grpcServerMutex.Unlock()
+	return owl.grpcServer
 }
 
-func (lazy *Owl) initLog() {
-	logLevel := lazy.config.LogLevel
-	if lazy.config.LogLevel == 0 && config.IsProduction() {
+func (owl *Owl) initLog() {
+	logLevel := owl.config.LogLevel
+	if owl.config.LogLevel == 0 && config.IsProduction() {
 		logLevel = log_levels.INFO
 	}
 
 	log_internal.Init(log_internal.LogConfig{
-		FileName:      lazy.config.LogFileName,
-		FolderName:    lazy.config.LogFolderName,
-		NoFile:        lazy.config.LogNoFile,
-		NoTime:        lazy.config.LogNoTime,
-		NoPrefix:      lazy.config.LogNoPrefix,
-		JsonMode:      lazy.config.LogJson,
+		FileName:      owl.config.LogFileName,
+		FolderName:    owl.config.LogFolderName,
+		NoFile:        owl.config.LogNoFile,
+		NoTime:        owl.config.LogNoTime,
+		NoPrefix:      owl.config.LogNoPrefix,
+		JsonMode:      owl.config.LogJson,
 		LogLevel:      logLevel,
-		CustomLoggers: lazy.config.CustomLoggers,
+		CustomLoggers: owl.config.CustomLoggers,
 	})
 }
 
-func (lazy *Owl) initConfig() {
-	config.SetEnvironmentName(lazy.config.EnvironmentName)
-	config.SetEnvironmentDefault(lazy.config.EnvironmentDefault)
-	config.SetEnvironmentFileName(lazy.config.EnvironmentFileName)
+func (owl *Owl) initConfig() {
+	config.SetEnvironmentName(owl.config.EnvironmentName)
+	config.SetEnvironmentDefault(owl.config.EnvironmentDefault)
+	config.SetEnvironmentFileName(owl.config.EnvironmentFileName)
 	config.Init()
 }
 
-func (lazy *Owl) initServer() {
+func (owl *Owl) initServer() {
 	// HTTP server already exist
-	if lazy.server != nil {
+	if owl.server != nil {
 		return
 	}
 
 	// only gRPC server (no HTTP)
-	if lazy.config.UseGRPC && lazy.config.OnlyGRPC {
+	if owl.config.UseGRPC && owl.config.OnlyGRPC {
 		return
 	}
 
-	lazy.serverMutex.Lock()
-	defer lazy.serverMutex.Unlock()
+	owl.serverMutex.Lock()
+	defer owl.serverMutex.Unlock()
 
 	timeoutDuration := time.Second * 60
-	if lazy.config.ServerTimeout != 0 {
-		timeoutDuration = lazy.config.ServerTimeout
+	if owl.config.ServerTimeout != 0 {
+		timeoutDuration = owl.config.ServerTimeout
 	}
 
-	if lazy.config.WebFramework == "" {
-		lazy.config.WebFramework = defaultWebFramework
+	if owl.config.WebFramework == "" {
+		owl.config.WebFramework = defaultWebFramework
 	}
-	switch lazy.config.WebFramework {
+	switch owl.config.WebFramework {
 	case frameworks.EchoFramework:
-		lazy.server = echo_server.New(timeoutDuration, lazy.config.UseHttp2)
+		owl.server = echo_server.New(timeoutDuration, owl.config.UseHttp2)
 	}
-	if lazy.server == nil {
+	if owl.server == nil {
 		panic("Initialization error. Server is NULL")
 	}
 
 	// set http 2.0 server
-	if lazy.config.UseHttp2 {
+	if owl.config.UseHttp2 {
 		// if config is empty, use default values
-		if lazy.config.Http2Config == nil {
-			lazy.config.Http2Config = &domain.Http2Config{
+		if owl.config.Http2Config == nil {
+			owl.config.Http2Config = &domain.Http2Config{
 				MaxConcurrentStreams: http2MaxConcurrentStreams,
 				MaxReadFrameSize:     http2MaxReadFrameSize,
 			}
 		}
 
 		// set http 2.0 server config
-		lazy.server.SetHttp2Config(lazy.config.Http2Config)
+		owl.server.SetHttp2Config(owl.config.Http2Config)
 	}
 
-	if lazy.config.UseSwagger {
-		lazy.server.ActivateSwagger()
+	if owl.config.UseSwagger {
+		owl.server.ActivateSwagger()
 	}
 }
 
-func (lazy *Owl) initGrpcServer() {
-	if lazy.grpcServer != nil {
+func (owl *Owl) initGrpcServer() {
+	if owl.grpcServer != nil {
 		return
 	}
 
-	if !lazy.config.UseGRPC {
+	if !owl.config.UseGRPC {
 		return
 	}
 
-	error_helper.LogGrpc = lazy.config.LogGRPC
+	error_helper.LogGrpc = owl.config.LogGRPC
 
-	lazy.grpcServerMutex.Lock()
-	defer lazy.grpcServerMutex.Unlock()
+	owl.grpcServerMutex.Lock()
+	defer owl.grpcServerMutex.Unlock()
 
-	lazy.grpcServer = grpc_server.New()
+	owl.grpcServer = grpc_server.New()
 }
 
-func (lazy *Owl) runShutDownWaiter() {
+func (owl *Owl) runShutDownWaiter() {
 	// create a channel to receive signals
 	signalChannel := make(chan os.Signal, 1)
 
@@ -134,7 +134,7 @@ func (lazy *Owl) runShutDownWaiter() {
 	<-signalChannel
 
 	// run shut down actions
-	lazy.shutdownService.Run()
+	owl.shutdownService.Run()
 
 	// call shutdown
 	os.Exit(0)
