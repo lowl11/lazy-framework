@@ -63,6 +63,7 @@ func New(config *Config) *Owl {
 	owl.initConfig()
 	owl.initLog()
 	owl.initServer()
+	owl.initGrpcServer()
 	go owl.runShutDownWaiter()
 	return owl
 }
