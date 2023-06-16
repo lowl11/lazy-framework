@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"github.com/lowl11/lazy-collection/array"
 	"github.com/lowl11/lazy-framework/helpers/error_helper"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -99,17 +98,22 @@ func (exception *Exception) copy() *Exception {
 }
 
 func (exception *Exception) techMessage(fullMessage bool) string {
-	withinMessages := make([]string, 0, len(exception.withinErrors))
-	array.NewWithList[error](exception.withinErrors...).Each(func(item error) {
-		withinMessages = append(withinMessages, item.Error())
-	})
+	withinMessages := strings.Builder{}
+	for _, err := range exception.withinErrors {
+		if err != nil {
+			continue
+		}
+
+		withinMessages.WriteString(err.Error())
+		withinMessages.WriteString(" | ")
+	}
 
 	var withinMessage string
-	if len(withinMessages) > 0 {
+	if withinMessages.Len() > 0 {
 		if fullMessage {
 			withinMessage = " --> "
 		}
-		withinMessage += strings.Join(withinMessages, " | ")
+		withinMessage += withinMessages.String()[:withinMessages.Len()-5]
 	}
 
 	return withinMessage

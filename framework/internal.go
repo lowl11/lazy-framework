@@ -1,17 +1,15 @@
 package framework
 
 import (
-	"errors"
-	"github.com/lowl11/lazy-collection/safe_array"
 	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazy-framework/data/interfaces"
 	"github.com/lowl11/lazy-framework/helpers/error_helper"
 	"github.com/lowl11/lazy-framework/internal/controllers"
 	"github.com/lowl11/lazy-framework/internal/echo_server"
 	"github.com/lowl11/lazy-framework/internal/grpc_server"
+	"github.com/lowl11/lazy-framework/internal/shutdown_service"
 	"github.com/lowl11/lazyconfig/config"
 	frameworkConfig "github.com/lowl11/lazyconfig/config"
-	"github.com/lowl11/lazylog/log"
 	"github.com/lowl11/lazylog/log/log_internal"
 	"github.com/lowl11/lazylog/logapi/log_levels"
 	"os"
@@ -38,12 +36,8 @@ var (
 	_grpcServer      interfaces.IGRPCServer
 	_grpcServerMutex sync.Mutex
 
-	_shutDownActions *safe_array.Array[func()]
+	_shutdownService *shutdown_service.Service
 )
-
-func init() {
-	_shutDownActions = safe_array.New[func()]()
-}
 
 func initFramework(frameworkConfig *Config) {
 	defer func() {
@@ -65,6 +59,7 @@ func initFramework(frameworkConfig *Config) {
 	// gRPC server init
 	initGrpcServer(frameworkConfig)
 
+	_shutdownService = shutdown_service.New()
 	go runShutDownWaiter()
 }
 
@@ -161,30 +156,16 @@ func initGrpcServer(frameworkConfig *Config) {
 }
 
 func runShutDownWaiter() {
-	// Create a channel to receive signals
+	// create a channel to receive signals
 	signalChannel := make(chan os.Signal, 1)
 
-	// Notify the signal channel when a SIGINT or SIGTERM signal is received
+	// notify the signal channel when a SIGINT or SIGTERM signal is received
 	signal.Notify(signalChannel, os.Interrupt, syscall.SIGTERM)
 
 	<-signalChannel
 
-	_shutDownActions.Each(func(item func()) {
-		defer func() {
-			if value := recover(); value != nil {
-				var err error
-				if _, ok := value.(string); ok {
-					err = errors.New(value.(string))
-				} else if _, ok = value.(error); ok {
-					err = value.(error)
-				}
-				log.Error(err, "Catch panic from shut down action")
-			}
-		}()
-
-		// call action
-		item()
-	})
+	// run shut down actions
+	_shutdownService.Run()
 
 	// call shutdown
 	os.Exit(0)

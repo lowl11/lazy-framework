@@ -98,7 +98,7 @@ func GrpcServer() interfaces.IGRPCServer {
 }
 
 func ShutDownAction(action func()) {
-	_shutDownActions.Push(action)
+	_shutdownService.Add(action)
 }
 
 func IsGrpc() bool {
