@@ -2,7 +2,7 @@ package static_controller
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/lowl11/lazy-framework/data/exceptions"
+	"github.com/lowl11/owl/data/exceptions"
 )
 
 func (controller *Controller) Health(ctx echo.Context) error {

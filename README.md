@@ -1,4 +1,4 @@
-# lazy-framework
+# lazy
 
 > Collection of other "lowl11" libraries need to build web microservices
 
@@ -11,7 +11,7 @@ package main
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/lowl11/lazy-framework/framework"
+	"github.com/lowl11/owl"
 	"github.com/lowl11/lazylog/log"
 	"net/http"
 	"time"
@@ -70,20 +70,20 @@ Call log from anywhere!
 ```go
 package main
 
-import "github.com/lowl11/lazylog/log"
+import "github.com/lowl11/owllog/log"
 
 func main() {
 	log.Info("test message", 1, true, false)
 }
 ```
 
-Set custom logger with common [interface](https://github.com/lowl11/lazylog/blob/master/logapi/interface.go). For example, for ElasticSearch
+Set custom logger with common [interface](https://github.com/lowl11/owllog/blob/master/logapi/interface.go). For example, for ElasticSearch
 
 Example:
 ```go
 package main
 
-import "github.com/lowl11/lazy-framework/framework"
+import "github.com/lowl11/owl/framework"
 
 func main() {
 	framework.Init(&framework.Config{
@@ -103,7 +103,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/lowl11/lazyconfig/config"
+	"github.com/lowl11/owlconfig/config"
 )
 
 func main() {

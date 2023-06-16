@@ -1,7 +1,7 @@
 package interfaces
 
 import (
-	"github.com/lowl11/lazy-framework/data/domain"
+	"github.com/lowl11/owl/data/domain"
 	"google.golang.org/grpc/codes"
 )
 

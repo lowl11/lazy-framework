@@ -1,4 +1,4 @@
-package framework
+package frameworks
 
 const (
 	EchoFramework = "echo"

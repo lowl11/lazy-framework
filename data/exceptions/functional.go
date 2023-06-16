@@ -1,8 +1,8 @@
 package exceptions
 
 import (
-	"github.com/lowl11/lazy-framework/data/domain"
-	"github.com/lowl11/lazy-framework/data/interfaces"
+	"github.com/lowl11/owl/data/domain"
+	"github.com/lowl11/owl/data/interfaces"
 )
 
 func New(businessMessage string, statuses ...int) interfaces.IException {

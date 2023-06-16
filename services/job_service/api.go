@@ -2,8 +2,8 @@ package job_service
 
 import (
 	"github.com/go-co-op/gocron"
-	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazylog/log"
+	"github.com/lowl11/owl/data/domain"
 )
 
 func (job *Job) Run() {

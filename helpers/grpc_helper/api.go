@@ -1,9 +1,9 @@
 package grpc_helper
 
 import (
-	"github.com/lowl11/lazy-framework/data/exceptions"
-	"github.com/lowl11/lazy-framework/data/interfaces"
-	"github.com/lowl11/lazy-framework/helpers/error_helper"
+	"github.com/lowl11/owl/data/exceptions"
+	"github.com/lowl11/owl/data/interfaces"
+	"github.com/lowl11/owl/helpers/error_helper"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

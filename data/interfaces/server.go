@@ -2,7 +2,7 @@ package interfaces
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/lowl11/lazy-framework/data/domain"
+	"github.com/lowl11/owl/data/domain"
 	"google.golang.org/grpc"
 )
 

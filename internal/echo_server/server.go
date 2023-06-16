@@ -2,7 +2,7 @@ package echo_server
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/lowl11/lazy-framework/data/domain"
+	"github.com/lowl11/owl/data/domain"
 	"time"
 )
 

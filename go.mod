@@ -1,4 +1,4 @@
-module github.com/lowl11/lazy-framework
+module github.com/lowl11/owl
 
 go 1.18
 

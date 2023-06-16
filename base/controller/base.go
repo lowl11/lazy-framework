@@ -2,12 +2,12 @@ package controller
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/lowl11/lazy-framework/data/domain"
-	"github.com/lowl11/lazy-framework/data/interfaces"
-	"github.com/lowl11/lazy-framework/helpers/error_helper"
-	"github.com/lowl11/lazy-framework/helpers/type_helper"
-	"github.com/lowl11/lazy-framework/helpers/validation"
 	"github.com/lowl11/lazylog/log"
+	"github.com/lowl11/owl/data/domain"
+	"github.com/lowl11/owl/data/interfaces"
+	"github.com/lowl11/owl/helpers/error_helper"
+	"github.com/lowl11/owl/helpers/type_helper"
+	"github.com/lowl11/owl/helpers/validation"
 	"google.golang.org/grpc/codes"
 	"net/http"
 )

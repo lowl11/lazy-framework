@@ -3,8 +3,8 @@ package echo_server
 import (
 	"errors"
 	"github.com/labstack/echo/v4"
-	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazylog/log"
+	"github.com/lowl11/owl/data/domain"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"golang.org/x/net/http2"
 )

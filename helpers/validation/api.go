@@ -2,7 +2,7 @@ package validation
 
 import (
 	"errors"
-	"github.com/lowl11/lazy-framework/helpers/type_helper"
+	"github.com/lowl11/owl/helpers/type_helper"
 	"unicode"
 )
 
