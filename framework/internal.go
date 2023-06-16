@@ -2,9 +2,7 @@ package framework
 
 import (
 	"errors"
-	"github.com/jmoiron/sqlx"
 	"github.com/lowl11/lazy-collection/safe_array"
-	"github.com/lowl11/lazy-entity/services/database_service"
 	"github.com/lowl11/lazy-framework/data/domain"
 	"github.com/lowl11/lazy-framework/data/interfaces"
 	"github.com/lowl11/lazy-framework/helpers/error_helper"
@@ -39,9 +37,6 @@ var (
 	_useGrpc         bool
 	_grpcServer      interfaces.IGRPCServer
 	_grpcServerMutex sync.Mutex
-
-	_useDatabase    bool
-	_connectionPool *sqlx.DB
 
 	_shutDownActions *safe_array.Array[func()]
 )
@@ -163,22 +158,6 @@ func initGrpcServer(frameworkConfig *Config) {
 	defer _grpcServerMutex.Unlock()
 
 	_grpcServer = grpc_server.New()
-}
-
-func initDatabase(connectionString string) {
-	if connectionString == "" {
-		return
-	}
-
-	_useDatabase = true
-	connection, err := database_service.
-		New(connectionString).
-		ConnectionPool()
-	if err != nil {
-		log.Fatal(err, "Create Connection pool & ping error")
-	}
-
-	_connectionPool = connection
 }
 
 func addShutDownAction(action func()) {
