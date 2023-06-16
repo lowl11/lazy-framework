@@ -7,7 +7,7 @@ require (
 	github.com/labstack/echo/v4 v4.10.2
 	github.com/lowl11/lazy-collection v0.1.2
 	github.com/lowl11/lazyconfig v1.1.6
-	github.com/lowl11/lazylog v1.2.6
+	github.com/lowl11/lazylog v1.2.7
 	github.com/swaggo/echo-swagger v1.4.0
 	golang.org/x/net v0.8.0
 	google.golang.org/grpc v1.55.0

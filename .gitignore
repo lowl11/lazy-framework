@@ -9,3 +9,5 @@ app
 .DS_Store
 .env
 Dockerfile
+*.png
+tmp
