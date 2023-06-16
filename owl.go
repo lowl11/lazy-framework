@@ -1,4 +1,4 @@
-package main
+package owl
 
 import (
 	"github.com/lowl11/lazylog/logapi"

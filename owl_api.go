@@ -1,4 +1,4 @@
-package main
+package owl
 
 import (
 	"github.com/labstack/echo/v4"

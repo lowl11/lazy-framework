@@ -11,3 +11,4 @@ app
 Dockerfile
 *.png
 tmp
+cmd
