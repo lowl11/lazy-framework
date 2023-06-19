@@ -128,14 +128,6 @@ test_env_key: {{TEST_ENV_KEY}} # <- will be replaced from env
 :white_check_mark: SOAP <br>
 :white_check_mark: gRPC <br>
 
-:white_check_mark: Postgres <br>
-:white_check_mark: Mongo <br>
-:x: Redis <br>
-:x: Elasticsearch <br>
-
-:white_check_mark: RabbitMQ <br>
-:x: Kafka <br>
-
 <hr>
 
 ### Web Frameworks <br>
