@@ -120,18 +120,7 @@ test_env_key: {{TEST_ENV_KEY}} # <- will be replaced from env
 
 
 ### Features
-<hr>
-
-### Tools
 :white_check_mark: REST <br>
 :white_check_mark: Cron Job <br>
 :white_check_mark: SOAP <br>
 :white_check_mark: gRPC <br>
-
-<hr>
-
-### Web Frameworks <br>
-:white_check_mark: Echo <br>
-:x: Gin <br>
-:x: Chi <br>
-:x: Fiber <br>
