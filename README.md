@@ -10,56 +10,16 @@ Start simple REST server with Echo library
 package main
 
 import (
-	"github.com/labstack/echo/v4"
 	"github.com/lowl11/owl"
-	"github.com/lowl11/lazylog/log"
-	"net/http"
-	"time"
+	"github.com/lowl11/lazyconfig/config"
 )
 
 func main() {
-	// init framework with given settings
-	framework.Init(&framework.Config{
-		// turn on swagger endpoints
-		UseSwagger: true,
+	// initialize server
+	server := owl.New(&owl.Config{})
 
-		// set config & environment settings
-		EnvironmentDefault: "local",
-
-		// turn on HTTP 2.0 mode
-		UseHttp2: true,
-		Http2Config: &domain.Http2Config{
-			MaxConcurrentStreams: 123,
-			MaxReadFrameSize:     123,
-		},
-
-		// custom settings before calling initialization (in .Server().Start())
-		LogFileName:   "info",
-		LogFolderName: "logs",
-
-		// server settings
-		ServerTimeout: time.Second * 30,
-	})
-
-	// setting Echo routes
-	setRoutes(framework.ServerEcho())
-
-	// print value from yaml config
-	log.Info("value from env:", config.Get("test_key"))
-
-	// global logging package
-	log.Info("hello world")
-
-	log.Info("Environment:", config.Env())
-
-	// starting server (calls .Fatal() log if catch error)
-	framework.StartServer(":8080")
-}
-
-func setRoutes(server *echo.Echo) {
-	server.GET("/test", func(c echo.Context) error {
-		return c.String(http.StatusOK, "test endpoint")
-	})
+	// run the server
+	server.Start(config.Get("server_port"))
 }
 ```
 
@@ -73,31 +33,40 @@ package main
 import "github.com/lowl11/owllog/log"
 
 func main() {
-	log.Info("test message", 1, true, false)
+	log.Debug("debug message")
+	log.Info("info message", 1, true, false)
+	log.Warn("warning message")
+	log.Error(err, "some error message")
+	log.Fatal(err, "some fatal message")
 }
 ```
 
-Set custom logger with common [interface](https://github.com/lowl11/owllog/blob/master/logapi/interface.go). For example, for ElasticSearch
+Set custom logger with common [interface](https://github.com/lowl11/lazylog/blob/master/logapi/interface.go)
 
 Example:
 ```go
 package main
 
-import "github.com/lowl11/owl/framework"
+import "github.com/lowl11/owl"
 
 func main() {
-	framework.Init(&framework.Config{
-		CustomLoggers: []logapi.ILogger{
-			&myLogger,
-		},
-	})
+    // initialize server 
+    server := owl.New(&owl.Config{
+        CustomLoggers: []logapi.ILogger{
+            &myLogger,
+        },
+    })
+
+    // run the server
+    server.Start(config.Get("server_port"))
 }
 ```
 
 ### Config
 <hr>
 
-Reads config values from profiles/<env_name>.yml file.
+Reads config values from profiles/<env_name>.yml file. <br>
+If yml file has no value for key, it goes from ENV
 ```go
 package main
 
