@@ -24,9 +24,10 @@ type Config struct {
 	CustomLoggers []logapi.ILogger
 
 	// environment
-	EnvironmentName     string
-	EnvironmentDefault  string
-	EnvironmentFileName string
+	EnvironmentBaseFolder   string
+	Environment             string
+	EnvironmentVariableName string
+	EnvironmentFileName     string
 
 	// server
 	UseHttp2      bool

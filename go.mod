@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/go-co-op/gocron v1.21.0
 	github.com/labstack/echo/v4 v4.10.2
-	github.com/lowl11/lazyconfig v1.1.6
+	github.com/lowl11/lazyconfig v1.1.8
 	github.com/lowl11/lazylog v1.2.7
 	github.com/swaggo/echo-swagger v1.4.0
 	golang.org/x/net v0.8.0

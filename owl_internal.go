@@ -2,6 +2,7 @@ package owl
 
 import (
 	"github.com/lowl11/lazyconfig/config"
+	"github.com/lowl11/lazyconfig/config/config_internal"
 	"github.com/lowl11/lazylog/log/log_internal"
 	"github.com/lowl11/lazylog/logapi/log_levels"
 	"github.com/lowl11/owl/data/domain"
@@ -52,10 +53,12 @@ func (owl *Owl) initLog() {
 }
 
 func (owl *Owl) initConfig() {
-	config.SetEnvironmentName(owl.config.EnvironmentName)
-	config.SetEnvironmentDefault(owl.config.EnvironmentDefault)
-	config.SetEnvironmentFileName(owl.config.EnvironmentFileName)
-	config.Init()
+	config_internal.SetEnvironment(owl.config.Environment)
+	config_internal.SetEnvironmentVariableName(owl.config.EnvironmentVariableName)
+	config_internal.SetEnvironmentFileName(owl.config.EnvironmentFileName)
+	config_internal.SetBaseFolder(owl.config.EnvironmentBaseFolder)
+
+	config_internal.Init()
 }
 
 func (owl *Owl) initServer() {
