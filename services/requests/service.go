@@ -46,6 +46,7 @@ func NewSoap(url string, body any) *Service {
 		method: http.MethodPost,
 		url:    url,
 		body:   body,
+		isXml:  true,
 
 		headers: make(map[string][]string),
 		cookies: make(map[string]string),

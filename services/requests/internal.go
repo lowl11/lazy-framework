@@ -42,10 +42,11 @@ func (service *Service) setBasicAuth() {
 	service.request.SetBasicAuth(service.username, service.password)
 }
 
-func (service *Service) ctx() (context.Context, func()) {
+func (service *Service) Ctx(customTimeout ...time.Duration) (context.Context, func()) {
 	defaultTimeout := time.Second * 10
 	if service.customTimeout {
 		defaultTimeout = service.timeout
 	}
+
 	return context.WithTimeout(context.Background(), defaultTimeout)
 }
