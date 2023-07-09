@@ -10,6 +10,7 @@ import (
 	"github.com/lowl11/owl/data/interfaces"
 	"github.com/lowl11/owl/helpers/error_helper"
 	"github.com/lowl11/owl/internal/echo_server"
+	"github.com/lowl11/owl/internal/fiber_server"
 	"github.com/lowl11/owl/internal/grpc_server"
 	"os"
 	"os/signal"
@@ -84,8 +85,10 @@ func (owl *Owl) initServer() {
 		owl.config.WebFramework = defaultWebFramework
 	}
 	switch owl.config.WebFramework {
-	case frameworks.EchoFramework:
+	case frameworks.Echo:
 		owl.server = echo_server.New(timeoutDuration, owl.config.UseHttp2)
+	case frameworks.Fiber:
+		owl.server = fiber_server.New(timeoutDuration, owl.config.UseHttp2)
 	}
 	if owl.server == nil {
 		panic("Initialization error. Server is NULL")
@@ -94,8 +97,8 @@ func (owl *Owl) initServer() {
 	// set http 2.0 server
 	if owl.config.UseHttp2 {
 		// if config is empty, use default values
-		if owl.config.Http2Config == nil {
-			owl.config.Http2Config = &domain.Http2Config{
+		if owl.config.Http2Config.MaxReadFrameSize == 0 {
+			owl.config.Http2Config = domain.Http2Config{
 				MaxConcurrentStreams: http2MaxConcurrentStreams,
 				MaxReadFrameSize:     http2MaxReadFrameSize,
 			}

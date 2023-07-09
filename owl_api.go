@@ -1,6 +1,7 @@
 package owl
 
 import (
+	"github.com/gofiber/fiber/v2"
 	"github.com/labstack/echo/v4"
 	"github.com/lowl11/lazylog/log"
 	"github.com/lowl11/owl/data/interfaces"
@@ -33,6 +34,10 @@ func (owl *Owl) StartGrpc(port string) {
 
 func (owl *Owl) Echo() *echo.Echo {
 	return owl.server.(interfaces.IEchoServer).Get()
+}
+
+func (owl *Owl) Fiber() *fiber.App {
+	return owl.server.(interfaces.IFiberServer).Get()
 }
 
 func (owl *Owl) Grpc() *grpc.Server {

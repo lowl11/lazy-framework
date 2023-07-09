@@ -1,5 +1,6 @@
 package frameworks
 
 const (
-	EchoFramework = "echo"
+	Echo  = "echo"
+	Fiber = "fiber"
 )

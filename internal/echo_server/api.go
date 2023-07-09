@@ -11,34 +11,34 @@ import (
 
 func (server *Server) Start(port string) {
 	// start server
-	log.Fatal(server.server.Start(port), "Start server error")
+	log.Fatal(server.app.Start(port), "Start server error")
 }
 
 func (server *Server) StartHttp2(port string) {
 	// check is HTTP 2.0 mode is ON
 	if !server.useHttp2 {
-		log.Fatal(errors.New("http 2.0 mode is turned off"), "Starting HTTP 2.0 server")
+		log.Fatal(errors.New("http 2.0 mode is turned off"), "Starting HTTP 2.0 app")
 	}
 
 	// check if config is NULL
-	if server.http2Config == nil {
-		log.Fatal(errors.New("config is NULL"), "Starting HTTP 2.0 server")
+	if server.http2Config.MaxReadFrameSize == 0 {
+		log.Fatal(errors.New("config is NULL"), "Starting HTTP 2.0 app")
 	}
 
-	// initializing server config
+	// initializing app config
 	http2Server := &http2.Server{
 		MaxConcurrentStreams: uint32(server.http2Config.MaxConcurrentStreams),
 		MaxReadFrameSize:     uint32(server.http2Config.MaxReadFrameSize),
 		IdleTimeout:          server.serverTimeout,
 	}
 
-	// start server
-	log.Fatal(server.server.StartH2CServer(port, http2Server), "Start HTTP2 server error")
+	// start app
+	log.Fatal(server.app.StartH2CServer(port, http2Server), "Start HTTP2 server error")
 }
 
-func (server *Server) SetHttp2Config(config *domain.Http2Config) {
+func (server *Server) SetHttp2Config(config domain.Http2Config) {
 	// check if config is NULL
-	if config == nil {
+	if config.MaxReadFrameSize == 0 {
 		log.Fatal(errors.New("config is NULL"), "Setting HTTP 2.0 config")
 	}
 
@@ -52,9 +52,9 @@ func (server *Server) ActivateSwagger(customEndpoint ...string) {
 	}
 
 	// activating swagger endpoints
-	server.server.GET(endpoint, echoSwagger.EchoWrapHandler())
+	server.app.GET(endpoint, echoSwagger.EchoWrapHandler())
 }
 
 func (server *Server) Get() *echo.Echo {
-	return server.server
+	return server.app
 }

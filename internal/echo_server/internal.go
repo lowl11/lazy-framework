@@ -7,13 +7,13 @@ import (
 )
 
 func (server *Server) setMiddlewares() {
-	server.server.Use(middleware.CORSWithConfig(middleware.DefaultCORSConfig))
-	server.server.Use(middleware.Secure())
-	server.server.Use(middleware.RecoverWithConfig(middleware.DefaultRecoverConfig))
-	server.server.Use(echo_middlewares.Timeout(server.serverTimeout))
+	server.app.Use(middleware.CORSWithConfig(middleware.DefaultCORSConfig))
+	server.app.Use(middleware.Secure())
+	server.app.Use(middleware.RecoverWithConfig(middleware.DefaultRecoverConfig))
+	server.app.Use(echo_middlewares.Timeout(server.serverTimeout))
 }
 
 func (server *Server) setEndpoints() {
-	server.server.GET("/health", controllers.Static.Health)
-	server.server.RouteNotFound("*", controllers.Static.RouteNotFound)
+	server.app.GET("/health", controllers.Static.Health)
+	server.app.RouteNotFound("*", controllers.Static.RouteNotFound)
 }

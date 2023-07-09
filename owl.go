@@ -31,7 +31,7 @@ type Config struct {
 
 	// server
 	UseHttp2      bool
-	Http2Config   *domain.Http2Config
+	Http2Config   domain.Http2Config
 	WebFramework  string
 	ServerTimeout time.Duration
 
