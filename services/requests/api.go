@@ -1,14 +1,7 @@
 package requests
 
 import (
-	"bytes"
 	"context"
-	"crypto/tls"
-	"encoding/json"
-	"encoding/xml"
-	"github.com/lowl11/lazylog/log"
-	"io/ioutil"
-	"net/http"
 	"time"
 )
 
@@ -33,6 +26,11 @@ func (service *Service) SslTrust() *Service {
 func (service *Service) NoProxy() *Service {
 	service.noProxy = true
 
+	return service
+}
+
+func (service *Service) Retries(retries int) *Service {
+	service.retries = retries
 	return service
 }
 
@@ -92,84 +90,29 @@ func (service *Service) Send() ([]byte, error) {
 }
 
 func (service *Service) SendCtx(ctx context.Context) ([]byte, error) {
-	var bodyBuffer *bytes.Buffer
-	if service.body != nil {
-		if value, ok := service.body.([]byte); ok {
-			bodyBuffer = bytes.NewBuffer(value)
-		} else {
-			var bodyInBytes []byte
-			var err error
-			if !service.isXml {
-				bodyInBytes, err = json.Marshal(service.body)
-			} else {
-				bodyInBytes, err = xml.Marshal(service.body)
+	response, err := service.sendRequest(ctx)
+	if err != nil || (isError(service.response.StatusCode) && service.retries > 0) {
+		for i := 0; i < service.retries; i++ {
+			response, err = service.sendRequest(ctx)
+			if err == nil && isOk(service.response.StatusCode) {
+				return response, nil
 			}
-			if err != nil {
-				return nil, err
-			}
-
-			bodyBuffer = bytes.NewBuffer(bodyInBytes)
 		}
-	}
 
-	var request *http.Request
-	var err error
-
-	if service.body != nil {
-		request, err = http.NewRequestWithContext(ctx, service.method, service.url, bodyBuffer)
-	} else {
-		request, err = http.NewRequestWithContext(ctx, service.method, service.url, nil)
-	}
-	if err != nil {
 		return nil, err
 	}
 
-	service.request = request
-
-	service.fillHeaders()
-	service.fillCookies()
-	service.setBasicAuth()
-
-	client := http.Client{
-		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{
-				InsecureSkipVerify: !service.sslCheck,
-			},
-		},
-	}
-
-	if service.noProxy {
-		client.Transport.(*http.Transport).Proxy = nil
-	}
-
-	response, err := client.Do(request)
-	if err != nil {
-		return nil, err
-	}
-	defer func() {
-		if err = response.Body.Close(); err != nil {
-			log.Error(err, "Close response body error")
-		}
-	}()
-
-	responseInBytes, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	service.status = response.StatusCode
-
-	return responseInBytes, nil
+	return response, nil
 }
 
 func (service *Service) SendStatus() ([]byte, int, error) {
 	response, err := service.Send()
 
-	return response, service.status, err
+	return response, service.response.StatusCode, err
 }
 
 func (service *Service) SendStatusCtx(ctx context.Context) ([]byte, int, error) {
 	response, err := service.SendCtx(ctx)
 
-	return response, service.status, err
+	return response, service.response.StatusCode, err
 }

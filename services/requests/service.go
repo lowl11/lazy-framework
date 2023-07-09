@@ -6,28 +6,39 @@ import (
 )
 
 type Service struct {
+	// basic info
 	method string
 	url    string
 	body   any
 
+	// request container
 	headers map[string][]string
 	cookies map[string]string
 
+	// body format
 	isXml bool
 
+	// timeout
 	timeout       time.Duration
 	customTimeout bool
 
+	// retries
+	retries int
+
+	// auth
 	isBasicAuth bool
 	username    string
 	password    string
 
-	request *http.Request
-
+	// network
 	sslCheck bool
 	noProxy  bool
 
-	status int
+	// req/resp
+	request  *http.Request
+	response *http.Response
+
+	responseBody []byte
 }
 
 func New(method, url string, body any) *Service {
@@ -38,6 +49,8 @@ func New(method, url string, body any) *Service {
 
 		headers: make(map[string][]string),
 		cookies: make(map[string]string),
+
+		responseBody: []byte{},
 	}
 }
 

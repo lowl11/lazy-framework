@@ -1,10 +1,88 @@
 package requests
 
 import (
+	"bytes"
 	"context"
+	"crypto/tls"
+	"encoding/json"
+	"encoding/xml"
+	"github.com/lowl11/lazylog/log"
+	"io/ioutil"
 	"net/http"
 	"time"
 )
+
+func (service *Service) sendRequest(ctx context.Context) ([]byte, error) {
+	var bodyBuffer *bytes.Buffer
+	if service.body != nil {
+		if value, ok := service.body.([]byte); ok {
+			bodyBuffer = bytes.NewBuffer(value)
+		} else {
+			var bodyInBytes []byte
+			var err error
+			if !service.isXml {
+				bodyInBytes, err = json.Marshal(service.body)
+			} else {
+				bodyInBytes, err = xml.Marshal(service.body)
+			}
+			if err != nil {
+				return nil, err
+			}
+
+			bodyBuffer = bytes.NewBuffer(bodyInBytes)
+		}
+	}
+
+	var request *http.Request
+	var err error
+
+	if service.body != nil {
+		request, err = http.NewRequestWithContext(ctx, service.method, service.url, bodyBuffer)
+	} else {
+		request, err = http.NewRequestWithContext(ctx, service.method, service.url, nil)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	service.request = request
+
+	service.fillHeaders()
+	service.fillCookies()
+	service.setBasicAuth()
+
+	client := http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: !service.sslCheck,
+			},
+		},
+	}
+
+	if service.noProxy {
+		client.Transport.(*http.Transport).Proxy = nil
+	}
+
+	response, err := client.Do(request)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if err = response.Body.Close(); err != nil {
+			log.Error(err, "Close response body error")
+		}
+	}()
+
+	responseInBytes, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	service.response = response
+	service.responseBody = responseInBytes
+
+	return responseInBytes, nil
+}
 
 func (service *Service) fillHeaders() {
 	if service.headers == nil {
@@ -49,4 +127,12 @@ func (service *Service) Ctx(customTimeout ...time.Duration) (context.Context, fu
 	}
 
 	return context.WithTimeout(context.Background(), defaultTimeout)
+}
+
+func isOk(code int) bool {
+	return code >= http.StatusOK && code <= http.StatusIMUsed
+}
+
+func isError(code int) bool {
+	return code >= http.StatusBadRequest
 }

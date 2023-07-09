@@ -42,7 +42,7 @@ type Config struct {
 }
 
 type Owl struct {
-	config *Config
+	config Config
 
 	server      interfaces.IServer
 	serverMutex sync.Mutex
@@ -54,7 +54,7 @@ type Owl struct {
 	shutdownService *shutdown_service.Service
 }
 
-func New(config *Config) *Owl {
+func New(config Config) *Owl {
 	owl := &Owl{
 		config:          config,
 		shutdownService: shutdown_service.New(),
