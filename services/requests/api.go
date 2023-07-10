@@ -5,6 +5,11 @@ import (
 	"time"
 )
 
+func (service *Service) ThreadSafe() *Service {
+	service.threadSafe = true
+	return service
+}
+
 func (service *Service) XML() *Service {
 	service.isXml = true
 

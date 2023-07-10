@@ -13,6 +13,7 @@ import (
 )
 
 func (service *Service) sendRequest(ctx context.Context) ([]byte, error) {
+	// parse body & convert to JSON/XML
 	var bodyBuffer *bytes.Buffer
 	if service.body != nil {
 		if value, ok := service.body.([]byte); ok {
@@ -36,6 +37,7 @@ func (service *Service) sendRequest(ctx context.Context) ([]byte, error) {
 	var request *http.Request
 	var err error
 
+	// create request
 	if service.body != nil {
 		request, err = http.NewRequestWithContext(ctx, service.method, service.url, bodyBuffer)
 	} else {
@@ -45,12 +47,15 @@ func (service *Service) sendRequest(ctx context.Context) ([]byte, error) {
 		return nil, err
 	}
 
+	// store request
 	service.request = request
 
+	// set request info
 	service.fillHeaders()
 	service.fillCookies()
 	service.setBasicAuth()
 
+	// create http client
 	client := http.Client{
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{
@@ -59,10 +64,16 @@ func (service *Service) sendRequest(ctx context.Context) ([]byte, error) {
 		},
 	}
 
+	// set no proxy
 	if service.noProxy {
 		client.Transport.(*http.Transport).Proxy = nil
 	}
 
+	// thread safe lock/unlock
+	service.lock()
+	defer service.unlock()
+
+	// sending request
 	response, err := client.Do(request)
 	if err != nil {
 		return nil, err
@@ -73,11 +84,13 @@ func (service *Service) sendRequest(ctx context.Context) ([]byte, error) {
 		}
 	}()
 
+	// parse response
 	responseInBytes, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return nil, err
 	}
 
+	// store response
 	service.response = response
 	service.responseBody = responseInBytes
 
@@ -127,6 +140,22 @@ func (service *Service) Ctx() (context.Context, func()) {
 	}
 
 	return context.WithTimeout(context.Background(), defaultTimeout)
+}
+
+func (service *Service) lock() {
+	if !service.threadSafe {
+		return
+	}
+
+	service.mutex.Lock()
+}
+
+func (service *Service) unlock() {
+	if !service.threadSafe {
+		return
+	}
+
+	service.mutex.Unlock()
 }
 
 func isOk(code int) bool {
