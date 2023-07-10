@@ -69,10 +69,6 @@ func (service *Service) sendRequest(ctx context.Context) ([]byte, error) {
 		client.Transport.(*http.Transport).Proxy = nil
 	}
 
-	// thread safe lock/unlock
-	service.lock()
-	defer service.unlock()
-
 	// sending request
 	response, err := client.Do(request)
 	if err != nil {
@@ -140,22 +136,6 @@ func (service *Service) Ctx() (context.Context, func()) {
 	}
 
 	return context.WithTimeout(context.Background(), defaultTimeout)
-}
-
-func (service *Service) lock() {
-	if !service.threadSafe {
-		return
-	}
-
-	service.mutex.Lock()
-}
-
-func (service *Service) unlock() {
-	if !service.threadSafe {
-		return
-	}
-
-	service.mutex.Unlock()
 }
 
 func isOk(code int) bool {

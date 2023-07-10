@@ -2,7 +2,6 @@ package requests
 
 import (
 	"net/http"
-	"sync"
 	"time"
 )
 
@@ -38,10 +37,6 @@ type Service struct {
 	// req/resp
 	request  *http.Request
 	response *http.Response
-
-	// thread safe mode
-	threadSafe bool
-	mutex      sync.Mutex
 
 	responseBody []byte
 }
