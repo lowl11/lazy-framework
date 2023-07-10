@@ -8,38 +8,38 @@ import (
 	"google.golang.org/grpc"
 )
 
-func (owl *Owl) ShutdownAction(action func()) {
-	owl.shutdownService.Add(action)
+func (app *App) ShutdownAction(action func()) {
+	app.shutdownService.Add(action)
 }
 
-func (owl *Owl) Start(port string) {
-	owl.server.Start(port)
+func (app *App) Start(port string) {
+	app.server.Start(port)
 }
 
-func (owl *Owl) StartHttp2(port string) {
-	owl.server.StartHttp2(port)
+func (app *App) StartHttp2(port string) {
+	app.server.StartHttp2(port)
 }
 
-func (owl *Owl) StartGrpc(port string) {
-	owl.ShutdownAction(func() {
-		if err := owl.grpcServer.Close(); err != nil {
+func (app *App) StartGrpc(port string) {
+	app.ShutdownAction(func() {
+		if err := app.grpcServer.Close(); err != nil {
 			log.Error(err, "Close gRPC server connection error")
 			return
 		}
 		log.Info("gRPC server connection closed!")
 	})
 
-	owl.getGrpcServer().Start(port)
+	app.getGrpcServer().Start(port)
 }
 
-func (owl *Owl) Echo() *echo.Echo {
-	return owl.server.(interfaces.IEchoServer).Get()
+func (app *App) Echo() *echo.Echo {
+	return app.server.(interfaces.IEchoServer).Get()
 }
 
-func (owl *Owl) Fiber() *fiber.App {
-	return owl.server.(interfaces.IFiberServer).Get()
+func (app *App) Fiber() *fiber.App {
+	return app.server.(interfaces.IFiberServer).Get()
 }
 
-func (owl *Owl) Grpc() *grpc.Server {
-	return owl.getGrpcServer().Get()
+func (app *App) Grpc() *grpc.Server {
+	return app.getGrpcServer().Get()
 }

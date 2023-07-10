@@ -25,112 +25,114 @@ const (
 	http2MaxReadFrameSize     = 1048576
 )
 
-func (owl *Owl) getGrpcServer() interfaces.IGRPCServer {
-	if !owl.config.UseGRPC {
+func (app *App) getGrpcServer() interfaces.IGRPCServer {
+	if !app.config.UseGRPC {
 		panic("Set flag UseGRPC in config")
 	}
 
-	owl.grpcServerMutex.Lock()
-	defer owl.grpcServerMutex.Unlock()
-	return owl.grpcServer
+	app.grpcServerMutex.Lock()
+	defer app.grpcServerMutex.Unlock()
+	return app.grpcServer
 }
 
-func (owl *Owl) initLog() {
-	logLevel := owl.config.LogLevel
-	if owl.config.LogLevel == 0 && config.IsProduction() {
+func (app *App) initLog() {
+	logLevel := app.config.LogLevel
+	if app.config.LogLevel == 0 && config.IsProduction() {
 		logLevel = log_levels.INFO
 	}
 
 	log_internal.Init(log_internal.LogConfig{
-		FileName:      owl.config.LogFileName,
-		FolderName:    owl.config.LogFolderName,
-		NoFile:        owl.config.LogNoFile,
-		NoTime:        owl.config.LogNoTime,
-		NoPrefix:      owl.config.LogNoPrefix,
-		JsonMode:      owl.config.LogJson,
+		FileName:      app.config.LogFileName,
+		FolderName:    app.config.LogFolderName,
+		NoFile:        app.config.LogNoFile,
+		NoTime:        app.config.LogNoTime,
+		NoPrefix:      app.config.LogNoPrefix,
+		JsonMode:      app.config.LogJson,
 		LogLevel:      logLevel,
-		CustomLoggers: owl.config.CustomLoggers,
+		CustomLoggers: app.config.CustomLoggers,
 	})
 }
 
-func (owl *Owl) initConfig() {
-	config_internal.SetEnvironment(owl.config.Environment)
-	config_internal.SetEnvironmentVariableName(owl.config.EnvironmentVariableName)
-	config_internal.SetEnvironmentFileName(owl.config.EnvironmentFileName)
-	config_internal.SetBaseFolder(owl.config.EnvironmentBaseFolder)
+func (app *App) initConfig() {
+	config_internal.SetEnvironment(app.config.Environment)
+	config_internal.SetEnvironmentVariableName(app.config.EnvironmentVariableName)
+	config_internal.SetEnvironmentFileName(app.config.EnvironmentFileName)
+	config_internal.SetBaseFolder(app.config.EnvironmentBaseFolder)
 
 	config_internal.Init()
 }
 
-func (owl *Owl) initServer() {
+func (app *App) initServer() {
 	// HTTP server already exist
-	if owl.server != nil {
+	if app.server != nil {
 		return
 	}
 
 	// only gRPC server (no HTTP)
-	if owl.config.UseGRPC && owl.config.OnlyGRPC {
+	if app.config.UseGRPC && app.config.OnlyGRPC {
 		return
 	}
 
-	owl.serverMutex.Lock()
-	defer owl.serverMutex.Unlock()
+	app.serverMutex.Lock()
+	defer app.serverMutex.Unlock()
 
 	timeoutDuration := time.Second * 60
-	if owl.config.ServerTimeout != 0 {
-		timeoutDuration = owl.config.ServerTimeout
+	if app.config.ServerTimeout != 0 {
+		timeoutDuration = app.config.ServerTimeout
 	}
 
-	if owl.config.WebFramework == "" {
-		owl.config.WebFramework = defaultWebFramework
+	if app.config.WebFramework == "" {
+		app.config.WebFramework = defaultWebFramework
 	}
-	switch owl.config.WebFramework {
+
+	switch app.config.WebFramework {
 	case frameworks.Echo:
-		owl.server = echo_server.New(timeoutDuration, owl.config.UseHttp2)
+		app.server = echo_server.New(timeoutDuration, app.config.UseHttp2)
 	case frameworks.Fiber:
-		owl.server = fiber_server.New(timeoutDuration, owl.config.UseHttp2)
+		app.server = fiber_server.New(timeoutDuration, app.config.UseHttp2)
 	}
-	if owl.server == nil {
+
+	if app.server == nil {
 		panic("Initialization error. Server is NULL")
 	}
 
 	// set http 2.0 server
-	if owl.config.UseHttp2 {
+	if app.config.UseHttp2 {
 		// if config is empty, use default values
-		if owl.config.Http2Config.MaxReadFrameSize == 0 {
-			owl.config.Http2Config = domain.Http2Config{
+		if app.config.Http2Config.MaxReadFrameSize == 0 {
+			app.config.Http2Config = domain.Http2Config{
 				MaxConcurrentStreams: http2MaxConcurrentStreams,
 				MaxReadFrameSize:     http2MaxReadFrameSize,
 			}
 		}
 
 		// set http 2.0 server config
-		owl.server.SetHttp2Config(owl.config.Http2Config)
+		app.server.SetHttp2Config(app.config.Http2Config)
 	}
 
-	if owl.config.UseSwagger {
-		owl.server.ActivateSwagger()
+	if app.config.UseSwagger {
+		app.server.ActivateSwagger()
 	}
 }
 
-func (owl *Owl) initGrpcServer() {
-	if owl.grpcServer != nil {
+func (app *App) initGrpcServer() {
+	if app.grpcServer != nil {
 		return
 	}
 
-	if !owl.config.UseGRPC {
+	if !app.config.UseGRPC {
 		return
 	}
 
-	error_helper.LogGrpc = owl.config.LogGRPC
+	error_helper.LogGrpc = app.config.LogGRPC
 
-	owl.grpcServerMutex.Lock()
-	defer owl.grpcServerMutex.Unlock()
+	app.grpcServerMutex.Lock()
+	defer app.grpcServerMutex.Unlock()
 
-	owl.grpcServer = grpc_server.New()
+	app.grpcServer = grpc_server.New()
 }
 
-func (owl *Owl) runShutDownWaiter() {
+func (app *App) runShutDownWaiter() {
 	// create a channel to receive signals
 	signalChannel := make(chan os.Signal, 1)
 
@@ -140,7 +142,7 @@ func (owl *Owl) runShutDownWaiter() {
 	<-signalChannel
 
 	// run shut down actions
-	owl.shutdownService.Run()
+	app.shutdownService.Run()
 
 	// call shutdown
 	os.Exit(0)

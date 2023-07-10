@@ -41,7 +41,7 @@ type Config struct {
 	LogGRPC  bool
 }
 
-type Owl struct {
+type App struct {
 	config Config
 
 	server      interfaces.IServer
@@ -54,17 +54,17 @@ type Owl struct {
 	shutdownService *shutdown_service.Service
 }
 
-func New(config Config) *Owl {
-	owl := &Owl{
+func New(config Config) *App {
+	app := &App{
 		config:          config,
 		shutdownService: shutdown_service.New(),
 	}
 
 	controllers.Init()
-	owl.initConfig()
-	owl.initLog()
-	owl.initServer()
-	owl.initGrpcServer()
-	go owl.runShutDownWaiter()
-	return owl
+	app.initConfig()
+	app.initLog()
+	app.initServer()
+	app.initGrpcServer()
+	go app.runShutDownWaiter()
+	return app
 }
