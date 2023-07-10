@@ -82,7 +82,7 @@ func (service *Service) Send() ([]byte, error) {
 	if service.customTimeout {
 		var cancel func()
 
-		ctx, cancel = service.Ctx(service.timeout)
+		ctx, cancel = service.Ctx()
 		defer cancel()
 	}
 
